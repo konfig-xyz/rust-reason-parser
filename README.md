@@ -1,5 +1,10 @@
 # Rust Diesel -> ReasonML 
 
+## Todo
+- [ ] - Make module names PascalCase
+- [ ] - Make type names camelCase
+- [ ] - Add config with 'ignore' to ignore record keys for a certain type / module
+
 ## Before First Run
 Pre-requisites: 
 - [Haskell Stack](https://docs.haskellstack.org/en/stable/README/)
