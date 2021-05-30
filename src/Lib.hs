@@ -3,11 +3,13 @@ module Lib (someFunc) where
 import Text.Parsec
 import TypeMapper
 import Types
+import System.Environment ( getArgs )
 
 someFunc :: IO ()
 someFunc = do
-  contents <- readFile "schema.rs"
-  print $ parseSchema contents
+  fileName <- getArgs
+  contents <- readFile $ concat fileName
+  putStrLn $ parseSchema contents
 
 typeTuple :: Parsec String () String
 typeTuple = do
@@ -17,7 +19,7 @@ typeTuple = do
   optional eof
   pure $ mapTypePair (typeName, typeVar)
 
-table :: Parsec String () Table
+table :: Parsec String () String
 table = do
   string "table! {" <* try spaces
   string "use diesel::sql_types::*;" <* try spaces
@@ -27,10 +29,12 @@ table = do
   contents <- manyTill (try typeTuple) $ try $ spaces *> string "}"
   spaces
   try $ string "}"
-  return (typeName, contents)
+  pure $ mapTable (typeName, contents)
 
-schema :: Parsec String () Schema
-schema = manyTill (try table <* spaces) $ try $ string "joinable"
+schema :: Parsec String () [String]
+schema = manyTill (try table <* spaces) $ try (string "joinable" <|> (eof >> pure ""))
 
 --parseSchema :: String -> String
-parseSchema = runParser schema () "Err"
+parseSchema xs = case runParser schema () "Err" xs of
+  Right x -> unlines x
+  Left y -> "Could not parse schema: " <> show y
