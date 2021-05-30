@@ -7,5 +7,7 @@ table! {
         some_bool -> Bool,
         some_int -> Int4,
         some_float -> Float4,
+        some_array -> Array<Text>,
+        some_option -> Nullable<Text>,
     }
 }

@@ -22,18 +22,22 @@ table! {
         some_bool -> Bool,
         some_int -> Int4,
         some_float -> Float4,
+        some_array -> Array<Text>,
+        some_option -> Nullable<Text>,
     }
 }
 ```
 #### Output
 ```reason
-module test {
+module Test {
   type t = {
-    test_id: string,
-    some_string: string,
-    some_bool: bool,
-    some_int: int,
-    some_float: float
+    testId: string,
+    someString: string,
+    someBool: bool,
+    someInt: int,
+    someFloat: float,
+    someArray: array(string),
+    someOption: option(string)
   };
 };
 ```
