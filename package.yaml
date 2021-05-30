@@ -23,7 +23,10 @@ dependencies:
 - base >= 4.7 && < 5
 - parsec
 - casing
-- yaml
+- text
+- containers
+- split
+- yaml-config
 
 library:
   source-dirs: src

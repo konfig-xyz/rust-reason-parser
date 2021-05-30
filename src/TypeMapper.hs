@@ -1,6 +1,8 @@
 module TypeMapper where
 
 import qualified Data.List as L
+import qualified Data.Map as M
+import Data.Maybe (fromJust, isJust)
 import Text.Casing
 import Text.Parsec
 import Types
@@ -11,19 +13,24 @@ parseContainer = do
   valueType <- manyTill anyChar $ try $ string ">" <* (eof >> pure "")
   pure (containerType, valueType)
 
-mapType :: String -> String
-mapType "Uuid" = "string" -- TODO -> Global type aliases
-mapType "Text" = "string"
-mapType "Bool" = "bool"
-mapType "Int4" = "int"
-mapType "Float4" = "float"
-mapType x = case runParser parseContainer () "Err" x of
-  Right ("Array", x) -> "array(" <> mapType x <> ")"
-  Right ("Nullable", x) -> "option(" <> mapType x <> ")"
-  Left y -> "Tried parsing: " <> x <> "; Errored with: " <> show y
+mapContainer :: Mapping -> Mapping -> Either ParseError (String, String) -> String
+mapContainer bMap nMap (Left y) = "Parse error: " <> show y
+mapContainer bMap nMap (Right (x, value))
+  | isJust key = fromJust key <> nesting
+  | otherwise = x <> nesting
+  where
+    key = M.lookup x nMap
+    nesting = "(" <> mapType bMap nMap value <> ")"
 
-mapTypePair :: TypePair -> String
-mapTypePair (typeName, typeValue) = toCamel (fromSnake typeName) <> ": " <> mapType typeValue
+mapType :: Mapping -> Mapping -> String -> String
+mapType bMap nMap xs
+  | isJust key = fromJust key
+  | otherwise = mapContainer bMap nMap (runParser parseContainer () "Err" xs)
+  where
+    key = M.lookup xs bMap
+
+mapTypePair :: Mapping -> Mapping -> TypePair -> String
+mapTypePair bMap nMap (typeName, typeValue) = toCamel (fromSnake typeName) <> ": " <> mapType bMap nMap typeValue
 
 mapTable :: Table -> String
 mapTable (tableName, types) = "module " <> toPascal (fromSnake tableName) <> " {\n\ttype t = {\n\t\t" <> L.intercalate ",\n\t\t" types <> "\n\t};\n};\n"

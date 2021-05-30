@@ -1,0 +1,22 @@
+types:
+  aliases:
+    - uuid->string
+  base:
+    - Uuid->uuid
+    - Text->string
+    - Bool->bool
+    - Int4->int
+    - Float4->float
+  nested:
+    - Array->array
+    - Nullable->option
+hiding:
+  configured:
+    - key:
+      - values
+    - key2:
+      - values
+  tables: 
+    - table01 
+  keys: 
+    - key01

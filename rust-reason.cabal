@@ -4,16 +4,16 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 1fc095c7d04f78d02358212aafa26d1c7ac4938b3b8be36b1724abeb6b8a83eb
+-- hash: b0c2ac294ce4604b010ef3754d354e9562055f9889d53a83d3adf7fd3166e52a
 
 name:           rust-reason
 version:        0.1.0.0
 description:    Please see the README on GitHub at <https://github.com/githubuser/rust-reason#readme>
 homepage:       https://github.com/githubuser/rust-reason#readme
 bug-reports:    https://github.com/githubuser/rust-reason/issues
-author:         Author name here
-maintainer:     example@example.com
-copyright:      2021 Author name here
+author:         Roland Peelen
+maintainer:     roland@konfig.xyz
+copyright:      2021 Roland Peelen
 license:        BSD3
 license-file:   LICENSE
 build-type:     Simple
@@ -37,7 +37,11 @@ library
   build-depends:
       base >=4.7 && <5
     , casing
+    , containers
     , parsec
+    , split
+    , text
+    , yaml-config
   default-language: Haskell2010
 
 executable rust-reason-exe
@@ -50,8 +54,12 @@ executable rust-reason-exe
   build-depends:
       base >=4.7 && <5
     , casing
+    , containers
     , parsec
     , rust-reason
+    , split
+    , text
+    , yaml-config
   default-language: Haskell2010
 
 test-suite rust-reason-test
@@ -65,6 +73,10 @@ test-suite rust-reason-test
   build-depends:
       base >=4.7 && <5
     , casing
+    , containers
     , parsec
     , rust-reason
+    , split
+    , text
+    , yaml-config
   default-language: Haskell2010
