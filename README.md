@@ -2,8 +2,6 @@
 
 ## Todo
 - [ ] - Add config with 'ignore' to ignore record keys for a certain type / module
-- [ ] - Add config with custom type mappers (for for instance 'uuid')
-- [ ] - Add config with custom ppx's to add
 
 ## Before First Run
 Pre-requisites: 
