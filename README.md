@@ -1,7 +1,8 @@
 # Rust Diesel -> ReasonML 
 
 ## Todo
-- [ ] - Add config with 'ignore' to ignore record keys for a certain type / module
+- [x] - Add config with 'ignore' to ignore record keys for a certain type / module
+- [ ] - Update config to include specified ignores (ie. x.y)
 
 ## Before First Run
 Pre-requisites: 
@@ -37,15 +38,15 @@ table! {
 type: uuid: string;
 
 module Test {
-	type t = {
-		testId: uuid,
-		someString: string,
-		someBool: bool,
-		someInt: int,
-		someFloat: float,
-		someArray: array(string),
-		someOption: option(string)
-	};
+  type t = {
+    testId: uuid,
+    someString: string,
+    someBool: bool,
+    someInt: int,
+    someFloat: float,
+    someArray: array(string),
+    someOption: option(string)
+  };
 };
 ```
 
