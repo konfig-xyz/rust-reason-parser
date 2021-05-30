@@ -8,7 +8,12 @@ Pre-requisites:
 - [Haskell Stack](https://docs.haskellstack.org/en/stable/README/)
 
 ## Usage
-Pass in a filename to the `stack run` command and get Reason parsed output...
+Pass in a filename and config file to the `stack run` command and get Reason 
+parsed output. See `example-config.yaml` for an example config file.
+
+```
+stack run {example-config.yaml} {example-schema.rs}
+```
 
 #### Input
 See also `test-schema.rs`
@@ -29,16 +34,18 @@ table! {
 ```
 #### Output
 ```reason
+type: uuid: string;
+
 module Test {
-  type t = {
-    testId: string,
-    someString: string,
-    someBool: bool,
-    someInt: int,
-    someFloat: float,
-    someArray: array(string),
-    someOption: option(string)
-  };
+	type t = {
+		testId: uuid,
+		someString: string,
+		someBool: bool,
+		someInt: int,
+		someFloat: float,
+		someArray: array(string),
+		someOption: option(string)
+	};
 };
 ```
 
@@ -50,5 +57,5 @@ module Test {
     ```
 - Build & Run
     ```bash
-    stack run {filename.rs} 
+    stack run {config.yaml} {filename.rs} 
     ```
