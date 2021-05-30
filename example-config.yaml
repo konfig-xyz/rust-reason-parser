@@ -17,6 +17,6 @@ hiding:
     - key2:
       - values
   tables: 
-    - table01 
+    - hide_me 
   keys: 
-    - key01
+    - hidden_id
