@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: e5512e3ae14c87e35dca2a1ffce484a2e86d55e0d77c32fd177adadef0ce4b58
+-- hash: 1492df258e27e18293341c4090d5162682581013382f4f57368b7bdb69d6d565
 
 name:           rust-reason
 version:        0.1.0.0
@@ -34,6 +34,7 @@ library
       src
   build-depends:
       base >=4.7 && <5
+    , parsec
   default-language: Haskell2010
 
 executable rust-reason-exe
@@ -45,6 +46,7 @@ executable rust-reason-exe
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       base >=4.7 && <5
+    , parsec
     , rust-reason
   default-language: Haskell2010
 
@@ -58,5 +60,6 @@ test-suite rust-reason-test
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       base >=4.7 && <5
+    , parsec
     , rust-reason
   default-language: Haskell2010
