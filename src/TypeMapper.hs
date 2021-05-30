@@ -32,5 +32,8 @@ mapType bMap nMap xs
 mapTypePair :: Mapping -> Mapping -> TypePair -> String
 mapTypePair bMap nMap (typeName, typeValue) = toCamel (fromSnake typeName) <> ": " <> mapType bMap nMap typeValue
 
+mapTableName :: String -> String
+mapTableName tableName = "module " <> toPascal (fromSnake tableName) <> " { };\n"
+
 mapTable :: Table -> String
 mapTable (tableName, types) = "module " <> toPascal (fromSnake tableName) <> " {\n\ttype t = {\n\t\t" <> L.intercalate ",\n\t\t" types <> "\n\t};\n};\n"

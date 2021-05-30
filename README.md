@@ -17,13 +17,48 @@ stack run {example-config.yaml} {example-schema.rs}
 ```
 
 #### Input
-See also `test-schema.rs`
+`example-config.yaml`
+```yaml
+types:
+  aliases:
+    - uuid->string
+  base:
+    - Uuid->uuid
+    - Text->string
+    - Bool->bool
+    - Int4->int
+    - Float4->float
+  nested:
+    - Array->array
+    - Nullable->option
+hiding:
+  configured:
+    - key:
+      - values
+    - key2:
+      - values
+  tables: 
+    - hide_me 
+  keys: 
+    - hidden_id
+```
+
+`example-schema.rs`
 ```rust
+table! {
+    use diesel::sql_types::*;
+
+    hide_me (hide_me_id) {
+        hide_me_id -> Uuid,
+    }
+}
+
 table! {
     use diesel::sql_types::*;
 
     test (test_id) {
         test_id -> Uuid,
+        hidden_id -> Uuid,
         some_string -> Text,
         some_bool -> Bool,
         some_int -> Int4,
@@ -37,16 +72,19 @@ table! {
 ```reason
 type: uuid: string;
 
+// module HideMe { };
+
 module Test {
-  type t = {
-    testId: uuid,
-    someString: string,
-    someBool: bool,
-    someInt: int,
-    someFloat: float,
-    someArray: array(string),
-    someOption: option(string)
-  };
+	type t = {
+		testId: uuid,
+		// hiddenId: uuid,
+		someString: string,
+		someBool: bool,
+		someInt: int,
+		someFloat: float,
+		someArray: array(string),
+		someOption: option(string)
+	};
 };
 ```
 

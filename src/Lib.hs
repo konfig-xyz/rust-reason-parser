@@ -46,7 +46,7 @@ table bMap nMap tSet kSet = do
   try $ string "}"
   if S.member typeName tSet
     then do
-      pure $ "// " <> typeName
+      pure $ "// " <> mapTableName typeName
     else do
       pure $ mapTable (typeName, contents)
 
