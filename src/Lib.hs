@@ -1,25 +1,21 @@
 module Lib (someFunc) where
 
-import Text.Parsec hiding (count)
+import Text.Parsec
+import TypeMapper
+import Types
 
 someFunc :: IO ()
 someFunc = do
   contents <- readFile "schema.rs"
   print $ parseSchema contents
 
-type TypePair = (String, String)
-
-type Table = (String, [TypePair])
-
-type Schema = [Table]
-
-typeTuple :: Parsec String () TypePair
+typeTuple :: Parsec String () String
 typeTuple = do
   spaces
   typeName <- manyTill anyChar $ spaces *> string "->" <* spaces
   typeVar <- manyTill anyChar $ string ","
   optional eof
-  return (typeName, typeVar)
+  pure $ mapTypePair (typeName, typeVar)
 
 table :: Parsec String () Table
 table = do
