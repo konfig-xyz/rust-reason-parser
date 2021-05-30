@@ -2,9 +2,9 @@ name:                rust-reason
 version:             0.1.0.0
 github:              "githubuser/rust-reason"
 license:             BSD3
-author:              "Author name here"
-maintainer:          "example@example.com"
-copyright:           "2021 Author name here"
+author:              "Roland Peelen"
+maintainer:          "roland@konfig.xyz"
+copyright:           "2021 Roland Peelen"
 
 extra-source-files:
 - README.md
@@ -23,6 +23,7 @@ dependencies:
 - base >= 4.7 && < 5
 - parsec
 - casing
+- yaml
 
 library:
   source-dirs: src
