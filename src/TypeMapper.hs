@@ -1,6 +1,7 @@
 module TypeMapper where
 
 import qualified Data.List as L
+import Text.Casing
 import Text.Parsec
 import Types
 
@@ -21,10 +22,8 @@ mapType x = case runParser parseContainer () "Err" x of
   Right ("Nullable", x) -> "Js.Nullable.t(" <> mapType x <> ")"
   Left y -> "Tried parsing: " <> x <> "; Errored with: " <> show y
 
--- TODO -> camelCase
 mapTypePair :: TypePair -> String
-mapTypePair (typeName, typeValue) = typeName <> ": " <> mapType typeValue
+mapTypePair (typeName, typeValue) = toCamel (fromSnake typeName) <> ": " <> mapType typeValue
 
--- TODO -> PascalCase
 mapTable :: Table -> String
-mapTable (tableName, types) = "module " <> tableName <> " {\n\ttype t = {\n\t\t" <> L.intercalate ",\n\t\t" types <> "\n\t};\n};"
+mapTable (tableName, types) = "module " <> toPascal (fromSnake tableName) <> " {\n\ttype t = {\n\t\t" <> L.intercalate ",\n\t\t" types <> "\n\t};\n};\n"
