@@ -4,6 +4,37 @@
 Pre-requisites: 
 - [Haskell Stack](https://docs.haskellstack.org/en/stable/README/)
 
+## Usage
+Pass in a filename to the `stack run` command and get Reason parsed output...
+
+#### Input
+See also `test-schema.rs`
+```rust
+table! {
+    use diesel::sql_types::*;
+
+    test (test_id) {
+        test_id -> Uuid,
+        some_string -> Text,
+        some_bool -> Bool,
+        some_int -> Int4,
+        some_float -> Float4,
+    }
+}
+```
+#### Output
+```reason
+module test {
+  type t = {
+    test_id: string,
+    some_string: string,
+    some_bool: bool,
+    some_int: int,
+    some_float: float
+  };
+};
+```
+
 ## Development
 
 - Build
@@ -12,5 +43,5 @@ Pre-requisites:
     ```
 - Build & Run
     ```bash
-    stack run
+    stack run {filename.rs} 
     ```
