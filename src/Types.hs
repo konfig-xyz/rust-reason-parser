@@ -10,4 +10,14 @@ type Table = (String, [String])
 type Schema = [Table]
 
 type Mapping = M.Map String String
+
 type Hidden = S.Set String
+
+data Configuration = Configuration
+  { aliases :: Mapping,
+    base :: Mapping,
+    nested :: Mapping,
+    tables :: Hidden,
+    keys :: Hidden
+  }
+  deriving (Show)

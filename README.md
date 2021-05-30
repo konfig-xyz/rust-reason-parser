@@ -3,6 +3,7 @@
 ## Todo
 - [x] - Add config with 'ignore' to ignore record keys for a certain type / module
 - [ ] - Update config to include specified ignores (ie. x.y)
+- [ ] - Further decouple parser / printer (flow should be `read, parse, print`)
 
 ## Before First Run
 Pre-requisites: 
@@ -75,16 +76,16 @@ type: uuid: string;
 // module HideMe { };
 
 module Test {
-	type t = {
-		testId: uuid,
-		// hiddenId: uuid,
-		someString: string,
-		someBool: bool,
-		someInt: int,
-		someFloat: float,
-		someArray: array(string),
-		someOption: option(string)
-	};
+  type t = {
+    testId: uuid,
+    // hiddenId: uuid,
+    someString: string,
+    someBool: bool,
+    someInt: int,
+    someFloat: float,
+    someArray: array(string),
+    someOption: option(string)
+  };
 };
 ```
 

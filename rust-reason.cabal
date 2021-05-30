@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: b0c2ac294ce4604b010ef3754d354e9562055f9889d53a83d3adf7fd3166e52a
+-- hash: eef9b6879bcea109e5e3106fb93175393ae22a605592854b44ad13362462c6c6
 
 name:           rust-reason
 version:        0.1.0.0
@@ -27,8 +27,9 @@ source-repository head
 
 library
   exposed-modules:
-      Lib
-      TypeMapper
+      ConfigurationParser
+      SchemaParser
+      SchemaPrinter
       Types
   other-modules:
       Paths_rust_reason
