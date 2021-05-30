@@ -19,7 +19,7 @@ mapType "Int4" = "int"
 mapType "Float4" = "float"
 mapType x = case runParser parseContainer () "Err" x of
   Right ("Array", x) -> "array(" <> mapType x <> ")"
-  Right ("Nullable", x) -> "Js.Nullable.t(" <> mapType x <> ")"
+  Right ("Nullable", x) -> "option(" <> mapType x <> ")"
   Left y -> "Tried parsing: " <> x <> "; Errored with: " <> show y
 
 mapTypePair :: TypePair -> String
