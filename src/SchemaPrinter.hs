@@ -42,11 +42,15 @@ printTypeName typeName = toCamel (fromSnake typeName)
 printType :: Configuration -> TypePair -> String
 printType configuration (typeName, typeValue) = printTypeName typeName <> ": " <> printTypeValue configuration typeValue
 
-printTableName :: String -> String
-printTableName tableName = "module " <> toPascal (fromSnake tableName) <> " { };\n"
+printModuleName :: String -> String
+printModuleName xs = "module " <> toPascal (fromSnake xs)
+
+printTableName :: String -> Maybe String -> String
+printTableName tableName (Just types) = printModuleName tableName <> " {\n" <> types <> "\n};\n"
+printTableName tableName Nothing = printModuleName tableName <> " { };\n"
 
 printTableTypes :: [String] -> String
-printTableTypes xs = " {\n\ttype t = {\n\t\t" <> L.intercalate ",\n\t\t" xs <> "\n\t};\n};\n"
+printTableTypes xs = "\ttype t = {\n\t\t" <> L.intercalate ",\n\t\t" xs <> "\n\t};\n"
 
 printTable :: Table -> String
-printTable (tableName, types) = printTableName tableName <> printTableTypes types
+printTable (tableName, types) = printTableName tableName (Just $ printTableTypes types)

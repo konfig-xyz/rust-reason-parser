@@ -36,7 +36,7 @@ parseTable configuration = do
   try $ string "}"
   if member typeName $ tables configuration
     then do
-      pure $ "// " <> printTableName typeName
+      pure $ "// " <> printTableName typeName Nothing
     else do
       pure $ printTable (typeName, contents)
 
