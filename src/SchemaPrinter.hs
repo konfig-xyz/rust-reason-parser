@@ -8,7 +8,7 @@ import Text.Parsec
 import Types
 
 printTypeAlias :: (String, String) -> String
-printTypeAlias (x, y) = "type: " <> x <> ": " <> y <> ";"
+printTypeAlias (x, y) = "type " <> x <> " = " <> y <> ";"
 
 printTypeAliases :: Mapping -> String
 printTypeAliases xs = L.intercalate "\n" (map printTypeAlias $ M.toList xs) <> "\n\n"

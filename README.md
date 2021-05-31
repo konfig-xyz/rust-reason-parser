@@ -71,21 +71,22 @@ table! {
 ```
 #### Output
 ```reason
-type: uuid: string;
+type uuid = string;
 
 // module HideMe { };
 
-module Test {
-  type t = {
-    testId: uuid,
-    // hiddenId: uuid,
-    someString: string,
-    someBool: bool,
-    someInt: int,
-    someFloat: float,
-    someArray: array(string),
-    someOption: option(string)
-  };
+module Test { };
+ {
+	type t = {
+		testId: uuid,
+		// hiddenId: uuid,
+		someString: string,
+		someBool: bool,
+		someInt: int,
+		someFloat: float,
+		someArray: array(string),
+		someOption: option(string)
+	};
 };
 ```
 
