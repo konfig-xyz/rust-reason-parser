@@ -75,8 +75,7 @@ type uuid = string;
 
 // module HideMe { };
 
-module Test { };
- {
+module Test {
 	type t = {
 		testId: uuid,
 		// hiddenId: uuid,
@@ -87,6 +86,7 @@ module Test { };
 		someArray: array(string),
 		someOption: option(string)
 	};
+
 };
 ```
 
