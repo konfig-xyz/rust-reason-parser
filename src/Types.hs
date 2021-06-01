@@ -5,7 +5,7 @@ import qualified Data.Set as S
 
 type TypePair = (String, String)
 
-type Table = (String, [String])
+type Table = (String, [TypePair])
 
 type Schema = [Table]
 

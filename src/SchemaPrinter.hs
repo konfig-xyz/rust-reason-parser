@@ -1,4 +1,4 @@
-module SchemaPrinter where
+module SchemaPrinter (printSchema) where
 
 import qualified Data.List as L
 import qualified Data.Map as M
@@ -49,8 +49,11 @@ printTableName :: String -> Maybe String -> String
 printTableName tableName (Just types) = printModuleName tableName <> " {\n" <> types <> "\n};\n"
 printTableName tableName Nothing = printModuleName tableName <> " { };\n"
 
-printTableTypes :: [String] -> String
-printTableTypes xs = "\ttype t = {\n\t\t" <> L.intercalate ",\n\t\t" xs <> "\n\t};\n"
+printTableTypes :: Configuration -> [TypePair] -> String
+printTableTypes configuration xs = "\ttype t = {\n\t\t" <> L.intercalate ",\n\t\t" (map (printType configuration) xs) <> "\n\t};\n"
 
-printTable :: Table -> String
-printTable (tableName, types) = printTableName tableName (Just $ printTableTypes types)
+printTable :: Configuration -> Table -> String
+printTable configuration (tableName, types) = printTableName tableName (Just $ printTableTypes configuration types)
+
+printSchema :: Configuration -> Schema -> String
+printSchema configuration = concatMap (printTable configuration)
