@@ -13,6 +13,9 @@ type Mapping = M.Map String String
 
 type Hidden = S.Set String
 
+data Visibility a = Visible a | Hidden
+     deriving (Eq, Ord)
+
 data Configuration = Configuration
   { aliases :: Mapping,
     base :: Mapping,
