@@ -1,8 +1,9 @@
-module SchemaPrinter where
+module SchemaPrinter (printSchema) where
 
 import qualified Data.List as L
 import qualified Data.Map as M
 import Data.Maybe (fromJust, isJust)
+import qualified Data.Set as S
 import Text.Casing
 import Text.Parsec
 import Types
@@ -40,17 +41,26 @@ printTypeName :: String -> String
 printTypeName typeName = toCamel (fromSnake typeName)
 
 printType :: Configuration -> TypePair -> String
-printType configuration (typeName, typeValue) = printTypeName typeName <> ": " <> printTypeValue configuration typeValue
+printType configuration (typeName, typeValue)
+  | S.member typeName (keys configuration) = "// " <> typeString
+  | otherwise = typeString
+  where
+    typeString = printTypeName typeName <> ": " <> printTypeValue configuration typeValue
 
 printModuleName :: String -> String
 printModuleName xs = "module " <> toPascal (fromSnake xs)
 
-printTableName :: String -> Maybe String -> String
-printTableName tableName (Just types) = printModuleName tableName <> " {\n" <> types <> "\n};\n"
-printTableName tableName Nothing = printModuleName tableName <> " { };\n"
+printTableName :: String -> Visibility String -> String
+printTableName tableName (Visible types) = printModuleName tableName <> " {\n" <> types <> "\n};\n"
+printTableName tableName Hidden = "// " <> printModuleName tableName <> " { };\n\n"
 
-printTableTypes :: [String] -> String
-printTableTypes xs = "\ttype t = {\n\t\t" <> L.intercalate ",\n\t\t" xs <> "\n\t};\n"
+printTableTypes :: Configuration -> [TypePair] -> String
+printTableTypes configuration xs = "\ttype t = {\n\t\t" <> L.intercalate ",\n\t\t" (map (printType configuration) xs) <> "\n\t};\n"
 
-printTable :: Table -> String
-printTable (tableName, types) = printTableName tableName (Just $ printTableTypes types)
+printTable :: Configuration -> Table -> String
+printTable configuration (tableName, types)
+  | S.member tableName (tables configuration) = printTableName tableName Hidden
+  | otherwise = printTableName tableName (Visible $ printTableTypes configuration types)
+
+printSchema :: Configuration -> Schema -> String
+printSchema configuration = concatMap (printTable configuration)
