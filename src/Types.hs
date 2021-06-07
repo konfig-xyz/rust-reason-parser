@@ -2,13 +2,14 @@ module Types where
 
 import qualified Data.Map as M
 import qualified Data.Set as S
+import qualified Data.Text as T
 
 ------------------
 -- Schema Types
 ------------------
-type TypePair = (String, String)
+type TypePair = (T.Text, T.Text)
 
-type Table = (String, [TypePair])
+type Table = (T.Text, [TypePair])
 
 type Schema = [Table]
 
@@ -18,11 +19,11 @@ data Visibility a = Visible a | Hidden
 -- Configuration Types
 ------------------
 
-type Mapping = M.Map String String
+type Mapping = M.Map T.Text T.Text
 
-type Hidden = S.Set String
+type Hidden = S.Set T.Text
 
-type HiddenQualified = M.Map String (S.Set String)
+type HiddenQualified = M.Map T.Text (S.Set T.Text)
 
 data Configuration = Configuration
   { aliases :: Mapping,
