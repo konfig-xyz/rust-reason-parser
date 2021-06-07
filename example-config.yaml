@@ -11,12 +11,11 @@ types:
     - Array->array
     - Nullable->option
 hiding:
-  configured:
-    - key:
-      - values
-    - key2:
-      - values
   tables: 
     - hide_me 
   keys: 
     - hidden_id
+  qualified:
+    qualified_hide:
+    - qualified_field
+    - another_qualified_field

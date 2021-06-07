@@ -1,9 +1,7 @@
 # Rust Diesel -> ReasonML 
 
 ## Todo
-- [x] - Add config with 'ignore' to ignore record keys for a certain type / module
-- [ ] - Update config to include specified ignores (ie. x.y)
-- [ ] - Further decouple parser / printer (flow should be `read, parse, print`)
+- [ ] - use `Data.Text` over `[Char]`
 
 ## Before First Run
 Pre-requisites: 
@@ -33,15 +31,14 @@ types:
     - Array->array
     - Nullable->option
 hiding:
-  configured:
-    - key:
-      - values
-    - key2:
-      - values
   tables: 
     - hide_me 
   keys: 
     - hidden_id
+  qualified:
+    qualified_hide:
+    - qualified_field
+    - another_qualified_field
 ```
 
 `example-schema.rs`
@@ -51,6 +48,23 @@ table! {
 
     hide_me (hide_me_id) {
         hide_me_id -> Uuid,
+    }
+}
+
+table! {
+    use diesel::sql_types::*;
+
+    qualified_shown (test_id) {
+        qualified_field -> Text,
+    }
+}
+
+table! {
+    use diesel::sql_types::*;
+
+    qualified_hide (test_id) {
+        qualified_field -> Text,
+        another_qualified_field -> Text,
     }
 }
 
@@ -75,6 +89,19 @@ type uuid = string;
 
 // module HideMe { };
 
+module QualifiedShown {
+	type t = {
+		qualifiedField: string
+	};
+
+};
+module QualifiedHide {
+	type t = {
+		// qualifiedField: string,
+		// anotherQualifiedField: string
+	};
+
+};
 module Test {
 	type t = {
 		testId: uuid,

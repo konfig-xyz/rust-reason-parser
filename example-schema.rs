@@ -9,6 +9,23 @@ table! {
 table! {
     use diesel::sql_types::*;
 
+    qualified_shown (test_id) {
+        qualified_field -> Text,
+    }
+}
+
+table! {
+    use diesel::sql_types::*;
+
+    qualified_hide (test_id) {
+        qualified_field -> Text,
+        another_qualified_field -> Text,
+    }
+}
+
+table! {
+    use diesel::sql_types::*;
+
     test (test_id) {
         test_id -> Uuid,
         hidden_id -> Uuid,

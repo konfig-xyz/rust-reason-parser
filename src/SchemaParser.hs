@@ -1,7 +1,6 @@
-module SchemaParser (parseSchema) where
+module SchemaParser (parseTypeContainer, parseSchema) where
 
 import Data.Set (member)
-import SchemaPrinter
 import Text.Parsec
 import Type.Reflection.Unsafe
 import Types
