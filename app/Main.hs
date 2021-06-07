@@ -1,6 +1,9 @@
+{-# LANGUAGE OverloadedStrings #-}
+
 module Main where
 
 import ConfigurationParser
+import qualified Data.Text as T
 import SchemaParser
 import SchemaPrinter
 import System.Environment (getArgs)
@@ -12,4 +15,5 @@ main = do
 
   configuration <- makeConfig configFile
   contents <- readFile schemaFile
-  putStrLn $ printTypeAliases (aliases configuration) <> (printSchema configuration $ parseSchema contents)
+
+  putStrLn $ T.unpack $ printTypeAliases (aliases configuration) <> printSchema configuration (parseSchema $ T.pack contents)
