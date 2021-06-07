@@ -46,11 +46,11 @@ printModuleName :: T.Text -> T.Text
 printModuleName xs = "module " <> snakeToPascal xs
 
 printTableName :: T.Text -> Visibility T.Text -> T.Text
-printTableName tableName (Visible types) = printModuleName tableName <> " {\n" <> types <> "\n};\n"
+printTableName tableName (Visible types) = printModuleName tableName <> " {\n" <> types <> "\n};\n\n"
 printTableName tableName Hidden = "// " <> printModuleName tableName <> " { };\n\n"
 
 printTableTypes :: Configuration -> T.Text -> [TypePair] -> T.Text
-printTableTypes configuration tableName xs = "\ttype t = {\n\t\t" <> T.intercalate ",\n\t\t" (map (printType configuration tableName) xs) <> "\n\t};\n"
+printTableTypes configuration tableName xs = "\ttype t = {\n\t\t" <> T.intercalate ",\n\t\t" (map (printType configuration tableName) xs) <> "\n\t};"
 
 printTable :: Configuration -> Table -> T.Text
 printTable configuration (tableName, types)
