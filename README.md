@@ -1,8 +1,5 @@
 # Rust Diesel -> ReasonML 
 
-## Todo
-- [ ] - use `Data.Text` over `[Char]`
-
 ## Before First Run
 Pre-requisites: 
 - [Haskell Stack](https://docs.haskellstack.org/en/stable/README/)
@@ -90,29 +87,29 @@ type uuid = string;
 // module HideMe { };
 
 module QualifiedShown {
-	type t = {
-		qualifiedField: string
-	};
+  type t = {
+    qualifiedField: string
+  };
 
 };
 module QualifiedHide {
-	type t = {
-		// qualifiedField: string,
-		// anotherQualifiedField: string
-	};
+  type t = {
+    // qualifiedField: string,
+    // anotherQualifiedField: string
+  };
 
 };
 module Test {
-	type t = {
-		testId: uuid,
-		// hiddenId: uuid,
-		someString: string,
-		someBool: bool,
-		someInt: int,
-		someFloat: float,
-		someArray: array(string),
-		someOption: option(string)
-	};
+  type t = {
+    testId: uuid,
+    // hiddenId: uuid,
+    someString: string,
+    someBool: bool,
+    someInt: int,
+    someFloat: float,
+    someArray: array(string),
+    someOption: option(string)
+  };
 
 };
 ```
