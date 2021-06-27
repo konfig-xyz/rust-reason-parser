@@ -43,14 +43,14 @@ printType configuration tableName (typeName, typeValue)
     typeString = snakeToCamel typeName <> ": " <> printTypeValue configuration typeValue
 
 printModuleName :: T.Text -> T.Text
-printModuleName xs = "module " <> snakeToPascal xs
+printModuleName xs = "module " <> snakeToPascal xs <> " = "
 
 printTableName :: T.Text -> Visibility T.Text -> T.Text
-printTableName tableName (Visible types) = printModuleName tableName <> " {\n" <> types <> "\n};\n\n"
-printTableName tableName Hidden = "// " <> printModuleName tableName <> " { };\n\n"
+printTableName tableName (Visible types) = printModuleName tableName <> "{\n" <> types <> "\n};"
+printTableName tableName Hidden = "// " <> printModuleName tableName <> "{ };"
 
 printTableTypes :: Configuration -> T.Text -> [TypePair] -> T.Text
-printTableTypes configuration tableName xs = "\ttype t = {\n\t\t" <> T.intercalate ",\n\t\t" (map (printType configuration tableName) xs) <> "\n\t};"
+printTableTypes configuration tableName xs = "  type t = {\n    " <> T.intercalate ",\n    " (map (printType configuration tableName) xs) <> ",\n  };"
 
 printTable :: Configuration -> Table -> T.Text
 printTable configuration (tableName, types)
@@ -58,4 +58,4 @@ printTable configuration (tableName, types)
   | otherwise = printTableName tableName (Visible $ printTableTypes configuration tableName types)
 
 printSchema :: Configuration -> Schema -> T.Text
-printSchema configuration = T.concat . map (printTable configuration)
+printSchema configuration = T.intercalate "\n\n" . map (printTable configuration)
