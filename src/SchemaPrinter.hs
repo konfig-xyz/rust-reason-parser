@@ -13,7 +13,7 @@ import Text.Parsec
 import Types
 
 printTypeAlias :: Configuration -> (T.Text, T.Text) -> T.Text
-printTypeAlias configuration (x, y) = T.concat (ppx configuration) <> "type " <> x <> " = " <> y <> ";"
+printTypeAlias configuration (x, y) = T.concat (aliasPPX configuration) <> "type " <> x <> " = " <> y <> ";"
 
 printTypeAliases :: Configuration -> T.Text
 printTypeAliases configuration = T.intercalate "\n" (map (printTypeAlias configuration) $ M.toList $ aliases configuration) <> "\n\n"
@@ -50,7 +50,7 @@ printTableName tableName (Visible types) = printModuleName tableName <> "{\n" <>
 printTableName tableName Hidden = "// " <> printModuleName tableName <> "{ };"
 
 printTableTypes :: Configuration -> T.Text -> [TypePair] -> T.Text
-printTableTypes configuration tableName xs = T.concat (map ("  " <>) $ ppx configuration) <> "  type t = {\n    " <> T.intercalate ",\n    " (map (printType configuration tableName) xs) <> ",\n  };"
+printTableTypes configuration tableName xs = T.concat (map ("  " <>) $ typePPX configuration) <> "  type t = {\n    " <> T.intercalate ",\n    " (map (printType configuration tableName) xs) <> ",\n  };"
 
 printTable :: Configuration -> Table -> T.Text
 printTable configuration (tableName, types)

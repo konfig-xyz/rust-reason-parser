@@ -26,7 +26,8 @@ type Hidden = S.Set T.Text
 type HiddenQualified = M.Map T.Text (S.Set T.Text)
 
 data Configuration = Configuration
-  { ppx :: [T.Text],
+  { aliasPPX :: [T.Text],
+    typePPX :: [T.Text],
     aliases :: Mapping,
     base :: Mapping,
     nested :: Mapping,

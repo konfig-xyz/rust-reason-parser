@@ -18,9 +18,6 @@ stack run {example-config.yaml} {example-schema.rs}
 types:
   aliases:
     - uuid->string
-  ppx:
-    - decco
-    - bs.deriving jsConverter
   base:
     - Uuid->uuid
     - Text->string
@@ -30,6 +27,12 @@ types:
   nested:
     - Array->array
     - Nullable->option
+annotations:
+  alias-ppx:
+    - decco
+  type-ppx:
+    - decco
+    - bs.deriving jsConverter
 hiding:
   tables: 
     - hide_me 
@@ -86,7 +89,6 @@ table! {
 #### Output
 ```reason
 [@decco]
-[@bs.deriving jsConverter]
 type uuid = string;
 
 // module HideMe = { };

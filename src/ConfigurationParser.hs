@@ -29,11 +29,13 @@ makeConfig path = do
   config <- load path
   types <- subconfig "types" config
   hiding <- subconfig "hiding" config
+  annotations <- subconfig "annotations" config
   qualified <- subconfig "qualified" hiding
 
   pure $
     T.Configuration
-      (toPPXs $ lookupDefault "ppx" [] types)
+      (toPPXs $ lookupDefault "alias-ppx" [] annotations)
+      (toPPXs $ lookupDefault "type-ppx" [] annotations)
       (toTypeMap $ lookupDefault "aliases" [] types)
       (toTypeMap $ lookupDefault "base" [] types)
       (toTypeMap $ lookupDefault "nested" [] types)
