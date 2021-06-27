@@ -16,4 +16,4 @@ main = do
   configuration <- makeConfig configFile
   contents <- readFile schemaFile
 
-  putStrLn $ T.unpack $ printTypeAliases (aliases configuration) <> printSchema configuration (parseSchema $ T.pack contents)
+  putStrLn $ T.unpack $ printTypeAliases configuration <> printSchema configuration (parseSchema $ T.pack contents)

@@ -12,11 +12,11 @@ import SchemaParser
 import Text.Parsec
 import Types
 
-printTypeAlias :: (T.Text, T.Text) -> T.Text
-printTypeAlias (x, y) = "type " <> x <> " = " <> y <> ";"
+printTypeAlias :: Configuration -> (T.Text, T.Text) -> T.Text
+printTypeAlias configuration (x, y) = T.concat (ppx configuration) <> "type " <> x <> " = " <> y <> ";"
 
-printTypeAliases :: Mapping -> T.Text
-printTypeAliases xs = T.intercalate "\n" (map printTypeAlias $ M.toList xs) <> "\n\n"
+printTypeAliases :: Configuration -> T.Text
+printTypeAliases configuration = T.intercalate "\n" (map (printTypeAlias configuration) $ M.toList $ aliases configuration) <> "\n\n"
 
 printTypeContainer :: Configuration -> Either ParseError (T.Text, T.Text) -> T.Text
 printTypeContainer configuration (Left y) = T.pack $ "Parse error: " <> show y
@@ -50,7 +50,7 @@ printTableName tableName (Visible types) = printModuleName tableName <> "{\n" <>
 printTableName tableName Hidden = "// " <> printModuleName tableName <> "{ };"
 
 printTableTypes :: Configuration -> T.Text -> [TypePair] -> T.Text
-printTableTypes configuration tableName xs = "  type t = {\n    " <> T.intercalate ",\n    " (map (printType configuration tableName) xs) <> ",\n  };"
+printTableTypes configuration tableName xs = T.concat (map ("  " <>) $ ppx configuration) <> "  type t = {\n    " <> T.intercalate ",\n    " (map (printType configuration tableName) xs) <> ",\n  };"
 
 printTable :: Configuration -> Table -> T.Text
 printTable configuration (tableName, types)

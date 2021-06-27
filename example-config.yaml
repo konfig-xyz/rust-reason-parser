@@ -1,6 +1,9 @@
 types:
   aliases:
     - uuid->string
+  ppx:
+    - decco
+    - bs.deriving jsConverter
   base:
     - Uuid->uuid
     - Text->string

@@ -21,6 +21,9 @@ toTypeMap = M.fromList . mapMaybe parseTypeMapConfiguration
 toQualified :: Config -> T.HiddenQualified
 toQualified xs = M.fromList $ map (\k -> (k, S.fromList $ lookupDefault k [] xs)) (keys xs)
 
+toPPXs :: [T.Text] -> [T.Text]
+toPPXs = map (\x -> "[@" <> x <> "]\n")
+
 makeConfig :: String -> IO T.Configuration
 makeConfig path = do
   config <- load path
@@ -30,6 +33,7 @@ makeConfig path = do
 
   pure $
     T.Configuration
+      (toPPXs $ lookupDefault "ppx" [] types)
       (toTypeMap $ lookupDefault "aliases" [] types)
       (toTypeMap $ lookupDefault "base" [] types)
       (toTypeMap $ lookupDefault "nested" [] types)

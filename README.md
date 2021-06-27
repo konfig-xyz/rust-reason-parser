@@ -18,6 +18,9 @@ stack run {example-config.yaml} {example-schema.rs}
 types:
   aliases:
     - uuid->string
+  ppx:
+    - decco
+    - bs.deriving jsConverter
   base:
     - Uuid->uuid
     - Text->string
@@ -82,24 +85,32 @@ table! {
 ```
 #### Output
 ```reason
+[@decco]
+[@bs.deriving jsConverter]
 type uuid = string;
 
-// module HideMe { };
+// module HideMe = { };
 
-module QualifiedShown {
+module QualifiedShown = {
+  [@decco]
+  [@bs.deriving jsConverter]
   type t = {
-    qualifiedField: string
+    qualifiedField: string,
   };
-
 };
-module QualifiedHide {
+
+module QualifiedHide = {
+  [@decco]
+  [@bs.deriving jsConverter]
   type t = {
     // qualifiedField: string,
-    // anotherQualifiedField: string
+    // anotherQualifiedField: string,
   };
-
 };
-module Test {
+
+module Test = {
+  [@decco]
+  [@bs.deriving jsConverter]
   type t = {
     testId: uuid,
     // hiddenId: uuid,
@@ -108,9 +119,8 @@ module Test {
     someInt: int,
     someFloat: float,
     someArray: array(string),
-    someOption: option(string)
+    someOption: option(string),
   };
-
 };
 ```
 
