@@ -16,3 +16,9 @@ snakeToCamel = T.pack . C.toCamel . C.fromSnake . T.unpack
 
 snakeToPascal :: T.Text -> T.Text
 snakeToPascal = T.pack . C.toPascal . C.fromSnake . T.unpack
+
+
+parseTypeSplitBy :: T.Text -> T.Text -> Maybe (T.Text, T.Text)
+parseTypeSplitBy c xs = case T.splitOn c xs of
+  [x, y] -> Just (x, y) --TODO - trim whitespace
+  _ -> Nothing

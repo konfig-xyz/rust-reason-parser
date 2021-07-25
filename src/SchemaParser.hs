@@ -8,6 +8,16 @@ import Text.Parsec
 import Type.Reflection.Unsafe
 import Types
 
+data TypeName = Simple T.Text | Qualified (T.Text, T.Text)
+  deriving (Eq, Ord)
+
+parseQualifiedType :: Parsec T.Text () (T.Text, T.Text)
+parseQualifiedType = do
+  spaces
+  base <- manyTill anyChar $ string "."
+  nesting <- manyTill anyChar eof
+  pure (T.pack base, T.pack nesting)
+
 parseTypeContainer :: Parsec T.Text () (T.Text, T.Text)
 parseTypeContainer = do
   containerType <- manyTill anyChar $ try $ string "<"

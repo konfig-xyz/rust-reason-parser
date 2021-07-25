@@ -31,6 +31,7 @@ data Configuration = Configuration
     aliases :: Mapping,
     base :: Mapping,
     nested :: Mapping,
+    qualifiedTypes :: Mapping,
     tables :: Hidden,
     keys :: Hidden,
     qualified :: HiddenQualified

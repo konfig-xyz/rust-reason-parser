@@ -28,19 +28,22 @@ printTypeContainer configuration (Right (x, value))
     nesting = "(" <> printTypeValue configuration value <> ")"
 
 printTypeValue :: Configuration -> T.Text -> T.Text
-printTypeValue configuration xs
+printTypeValue configuration typeName
   | isJust key = fromJust key
-  | otherwise = printTypeContainer configuration (runParser parseTypeContainer () "Error" xs)
+  | otherwise = printTypeContainer configuration (runParser parseTypeContainer () "Error" typeName)
   where
-    key = M.lookup xs $ base configuration
+    key = M.lookup typeName $ base configuration
 
 printType :: Configuration -> T.Text -> TypePair -> T.Text
 printType configuration tableName (typeName, typeValue)
   | S.member typeName mergedQualifiedKeys = "// " <> typeString
+  | isJust qualifiedTypeString = fromJust qualifiedTypeString
   | otherwise = typeString
   where
     mergedQualifiedKeys = mergeQualified configuration tableName
-    typeString = snakeToCamel typeName <> ": " <> printTypeValue configuration typeValue
+    typeStringLHS = snakeToCamel typeName <> ": "
+    qualifiedTypeString = fmap (typeStringLHS <>) $ M.lookup (tableName <> "." <> typeName) $ qualifiedTypes configuration
+    typeString = typeStringLHS <> printTypeValue configuration typeValue
 
 printModuleName :: T.Text -> T.Text
 printModuleName xs = "module " <> snakeToPascal xs <> " = "
