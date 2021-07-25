@@ -1,5 +1,20 @@
 # Rust Diesel -> ReasonML 
 
+## Rationale
+For more simple CRUD apps, there is often a near 1-1 mapping of types from DB,
+to API, to FE. This packages tries to take advantage of this fact, and create
+this mapping. Specifically from a Diesel / Rust `schema.rs` file, to a single
+file, that outputs ReasonML types in the conventional `Module.t` notation.
+It does so with reaonable flexibilty, allowing for:
+- Specifiying alias types
+- Specifiying mappings based on types and fieldnames (`table.field`)
+- Specifiying mappings for nested types
+- Add annotations (ppx's) for aliases and for types
+- Hide:
+  - Modules (tables)
+  - Fieldnames
+  - Qualified types (`table.field`)
+
 ## Before First Run
 Pre-requisites: 
 - [Haskell Stack](https://docs.haskellstack.org/en/stable/README/)
@@ -12,7 +27,7 @@ parsed output. See `example-config.yaml` for an example config file.
 stack run {example-config.yaml} {example-schema.rs}
 ```
 
-#### Input
+### Input
 `example-config.yaml`
 ```yaml
 types:
@@ -27,6 +42,8 @@ types:
   nested:
     - Array->array
     - Nullable->option
+  qualified:
+    - test.some_string->someRandomTypeName
 annotations:
   alias-ppx:
     - decco
@@ -116,7 +133,7 @@ module Test = {
   type t = {
     testId: uuid,
     // hiddenId: uuid,
-    someString: string,
+    someString: someRandomTypeName,
     someBool: bool,
     someInt: int,
     someFloat: float,
@@ -136,3 +153,38 @@ module Test = {
     ```bash
     stack run {config.yaml} {filename.rs} 
     ```
+
+## Configuration Keys (-vv)
+
+#### Types.Aliases
+To keep the output self-contained, we allow for the specification of alias types, that get printed at the top of the output.
+
+#### Types.Base
+These are the base mappings. Based on the `value` of the type in the `schema.rs`, we map the `value` of the type over. The name of the type get's passed as-is, only converted to camel-case.
+
+#### Types.Nested
+Whenever we encounter something like `Nullable<foo>` we need to know what to map it too. These mappings can be specified here. Note that **they recurse**. So given the configuration above, and the input type `Nullable<Array<Nullable<Int4>>`, we would generate `option(array(option(int)))`. 
+
+#### Types.Nested
+There may be cases where you don't want to switch based on the type's `value`, but rather on its `name`. For instance, when you want to save an convert a `string` to a `variant` type only relevant to the FE. This is where you would do that.
+
+#### Annotations.(Alias-PPX | Type-PPX)
+PPX annotations can be used to annotate types so that they automatically get some extra nice-ties. Such as using [decco](https://github.com/reasonml-labs/decco) for automatic JSON conversion, or [bs-pancake](https://github.com/rolandpeelen/bs-pancake) to automatically generate lenses for each record entry. There are respectively intended for either aliases (which are printed at the top), or for the types themselves. Some PPX's, like [decco](https://github.com/reasonml-labs/decco) require a sort of bottom-up approach, where every type in a record is also annotated itself. Hence the `alias-ppx` field.
+
+#### Hiding.Tables
+If the API you're building has some tables that are not to be exposed to the FE, here's where you would specify them. They'll be commented out in the output. Given that Reason will try to convert as-little as possible, the comments will automatically dissapear. However, for the more full-stack oriented, it might be nice to keep it in there, hence commented as opposed to deleted.
+
+#### Hiding.Keys
+Sometimes one doesn't want to hide a full `table`, but instead a `key` that occurs on a bunch of tables. For instance a `userId` or `companyId`.
+
+#### Hiding.Qualified
+This is the more specific variant to `tables` / `keys`. It allows for the full specification of hiding (`user.password`) for instance.
+
+**NOTE** - There is a difference in qualified notation between `types` and `hiding`. Reasoning here is that hiding multiple elements from a type is more common than having multiple `convert-by-typename` elements.
+
+
+## TODO
+- [ ] - Build 'the' definitive mapping as a good default
+- [ ] - Build this in CI
+- [ ] - Tests...
+- [ ] - Homebrew / ... ?

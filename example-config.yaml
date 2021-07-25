@@ -10,6 +10,8 @@ types:
   nested:
     - Array->array
     - Nullable->option
+  qualified:
+    - test.some_string->someRandomTypeName
 annotations:
   alias-ppx:
     - decco
