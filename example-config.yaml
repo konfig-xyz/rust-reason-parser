@@ -22,6 +22,8 @@ annotations:
   type-ppx:
     - decco
     - bs.deriving jsConverter
+  containerized-ppx:
+    - decco
 hiding:
   tables: 
     - hide_me 

@@ -63,14 +63,20 @@ printTableName :: T.Text -> Visibility T.Text -> T.Text
 printTableName tableName (Visible types) = printModuleName tableName <> "{\n" <> types <> "\n};"
 printTableName tableName Hidden = "// " <> printModuleName tableName <> "{ };"
 
-printPPXs :: Configuration -> T.Text
-printPPXs configuration = T.concat (map ("  " <>) $ typePPX configuration)
+printPPXs :: [T.Text] -> T.Text
+printPPXs xs = T.concat $ map ("  " <>) xs
+
+printTypePPXs :: Configuration -> T.Text
+printTypePPXs = printPPXs . typePPX
+
+printContainerizedPPXs :: Configuration -> T.Text
+printContainerizedPPXs = printPPXs . containerizedPPX
 
 printContainerTypeAliases :: Configuration -> T.Text
 printContainerTypeAliases configuration =
   T.intercalate "\n\n" $
     ( \(x, y) ->
-        printPPXs configuration
+        printContainerizedPPXs configuration
           <> "  type "
           <> x
           <> " = "
@@ -81,7 +87,7 @@ printContainerTypeAliases configuration =
 
 printTableTypes :: Configuration -> T.Text -> [TypePair] -> T.Text
 printTableTypes configuration tableName xs =
-  printPPXs configuration
+  printTypePPXs configuration
     <> "  type t = {\n    "
     <> T.intercalate ",\n    " (fmap (printType configuration tableName) xs)
     <> ",\n  };\n\n"

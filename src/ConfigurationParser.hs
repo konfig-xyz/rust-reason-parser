@@ -36,6 +36,7 @@ makeConfig path = do
     T.Configuration
       (toPPXs $ lookupDefault "alias-ppx" [] annotations)
       (toPPXs $ lookupDefault "type-ppx" [] annotations)
+      (toPPXs $ lookupDefault "containerized-ppx" [] annotations)
       (toTypeMap $ lookupDefault "aliases" [] types)
       (toTypeMap $ lookupDefault "containerized" [] types)
       (toTypeMap $ lookupDefault "base" [] types)
