@@ -13,10 +13,18 @@ import Text.Parsec
 import Types
 
 printTypeAlias :: Configuration -> (T.Text, T.Text) -> T.Text
-printTypeAlias configuration (x, y) = T.concat (aliasPPX configuration) <> "type " <> x <> " = " <> y <> ";"
+printTypeAlias configuration (x, y) =
+  T.concat (aliasPPX configuration) <> "type " <> x <> " = " <> y <> ";"
 
 printTypeAliases :: Configuration -> T.Text
-printTypeAliases configuration = T.intercalate "\n" (map (printTypeAlias configuration) $ M.toList $ aliases configuration) <> "\n\n"
+printTypeAliases configuration =
+  T.intercalate
+    "\n"
+    ( map (printTypeAlias configuration) $
+        M.toList $
+          aliases configuration
+    )
+    <> "\n\n"
 
 printTypeContainer :: Configuration -> Either ParseError (T.Text, T.Text) -> T.Text
 printTypeContainer configuration (Left y) = T.pack $ "Parse error: " <> show y
@@ -42,7 +50,10 @@ printType configuration tableName (typeName, typeValue)
   where
     mergedQualifiedKeys = mergeQualified configuration tableName
     typeStringLHS = snakeToCamel typeName <> ": "
-    qualifiedTypeString = fmap (typeStringLHS <>) $ M.lookup (tableName <> "." <> typeName) $ qualifiedTypes configuration
+    qualifiedTypeString =
+      fmap (typeStringLHS <>) $
+        M.lookup (tableName <> "." <> typeName) $
+          qualifiedTypes configuration
     typeString = typeStringLHS <> printTypeValue configuration typeValue
 
 printModuleName :: T.Text -> T.Text
@@ -52,8 +63,29 @@ printTableName :: T.Text -> Visibility T.Text -> T.Text
 printTableName tableName (Visible types) = printModuleName tableName <> "{\n" <> types <> "\n};"
 printTableName tableName Hidden = "// " <> printModuleName tableName <> "{ };"
 
+printPPXs :: Configuration -> T.Text
+printPPXs configuration = T.concat (map ("  " <>) $ typePPX configuration)
+
+printContainerTypeAliases :: Configuration -> T.Text
+printContainerTypeAliases configuration =
+  T.intercalate "\n\n" $
+    ( \(x, y) ->
+        printPPXs configuration
+          <> "  type "
+          <> x
+          <> " = "
+          <> y
+          <> "(t);"
+    )
+      <$> M.toList (containerized configuration)
+
 printTableTypes :: Configuration -> T.Text -> [TypePair] -> T.Text
-printTableTypes configuration tableName xs = T.concat (map ("  " <>) $ typePPX configuration) <> "  type t = {\n    " <> T.intercalate ",\n    " (map (printType configuration tableName) xs) <> ",\n  };"
+printTableTypes configuration tableName xs =
+  printPPXs configuration
+    <> "  type t = {\n    "
+    <> T.intercalate ",\n    " (fmap (printType configuration tableName) xs)
+    <> ",\n  };\n\n"
+    <> printContainerTypeAliases configuration
 
 printTable :: Configuration -> Table -> T.Text
 printTable configuration (tableName, types)

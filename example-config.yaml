@@ -1,6 +1,10 @@
 types:
   aliases:
     - uuid->string
+  containerized:
+    - arrayT->array
+    - listT->list
+    - optionT->option
   base:
     - Uuid->uuid
     - Text->string
