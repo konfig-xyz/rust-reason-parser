@@ -29,6 +29,7 @@ data Configuration = Configuration
   { aliasPPX :: [T.Text],
     typePPX :: [T.Text],
     aliases :: Mapping,
+    containerized :: Mapping,
     base :: Mapping,
     nested :: Mapping,
     qualifiedTypes :: Mapping,

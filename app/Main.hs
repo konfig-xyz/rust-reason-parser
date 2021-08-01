@@ -16,4 +16,5 @@ main = do
   configuration <- makeConfig configFile
   contents <- readFile schemaFile
 
+  print $ containerized configuration
   putStrLn $ T.unpack $ printTypeAliases configuration <> printSchema configuration (parseSchema $ T.pack contents)
