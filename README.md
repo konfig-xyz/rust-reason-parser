@@ -5,7 +5,7 @@ For more simple CRUD apps, there is often a near 1-1 mapping of types from DB,
 to API, to FE. This packages tries to take advantage of this fact, and create
 this mapping. Specifically from a Diesel / Rust `schema.rs` file, to a single
 file, that outputs ReasonML types in the conventional `Module.t` notation.
-It does so with reaonable flexibilty, allowing for:
+It does so with reasonable flexibilty, allowing for:
 - Specifiying alias types
 - Specifiying mappings based on types and fieldnames (`table.field`)
 - Specifiying mappings for nested types
