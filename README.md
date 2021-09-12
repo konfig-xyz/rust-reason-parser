@@ -109,7 +109,6 @@ table! {
 ```
 #### Output
 ```reason
-fromList [("arrayT","array"),("listT","list"),("optionT","option")]
 [@decco]
 type uuid = string;
 
@@ -123,15 +122,12 @@ module QualifiedShown = {
   };
 
   [@decco]
-  [@bs.deriving jsConverter]
   type arrayT = array(t);
 
   [@decco]
-  [@bs.deriving jsConverter]
   type listT = list(t);
 
   [@decco]
-  [@bs.deriving jsConverter]
   type optionT = option(t);
 };
 
@@ -144,15 +140,12 @@ module QualifiedHide = {
   };
 
   [@decco]
-  [@bs.deriving jsConverter]
   type arrayT = array(t);
 
   [@decco]
-  [@bs.deriving jsConverter]
   type listT = list(t);
 
   [@decco]
-  [@bs.deriving jsConverter]
   type optionT = option(t);
 };
 
@@ -171,15 +164,12 @@ module Test = {
   };
 
   [@decco]
-  [@bs.deriving jsConverter]
   type arrayT = array(t);
 
   [@decco]
-  [@bs.deriving jsConverter]
   type listT = list(t);
 
   [@decco]
-  [@bs.deriving jsConverter]
   type optionT = option(t);
 };
 ```
@@ -219,7 +209,7 @@ type's `value`, but rather on its `name`. For instance, when you want to save an
 convert a `string` to a `variant` type only relevant to the FE. This is where
 you would do that.
 
-#### Annotations.(Alias-PPX | Type-PPX) PPX annotations can be used to annotate
+#### Annotations.(Alias-PPX | Type-PPX | Containerized-PPX) PPX annotations can be used to annotate
 types so that they automatically get some extra nice-ties. Such as using
 [decco](https://github.com/reasonml-labs/decco) for automatic JSON conversion,
 or [bs-pancake](https://github.com/rolandpeelen/bs-pancake) to automatically
@@ -227,7 +217,8 @@ generate lenses for each record entry. There are respectively intended for
 either aliases (which are printed at the top), or for the types themselves. Some
 PPX's, like [decco](https://github.com/reasonml-labs/decco) require a sort of
 bottom-up approach, where every type in a record is also annotated itself. Hence
-the `alias-ppx` field.
+the `alias-ppx` field. The `containerized-ppx` is the latest addition for more
+flexibility.
 
 #### Hiding.Tables If the API you're building has some tables that are not to be
 exposed to the FE, here's where you would specify them. They'll be commented out
