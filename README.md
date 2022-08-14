@@ -15,11 +15,33 @@ It does so with reasonable flexibilty, allowing for:
   - Fieldnames
   - Qualified types (`table.field`)
 
-## Before First Run
+
+## Usage
+### Using Docker
+We provide a docker image that's synced with latest master, to make the process
+of diffing / generating these files easier. Given a project with the following
+folder structure:
+
+```
+xyz
+- app
+-- src
+---- schema.rs
+- config.yaml
+```
+
+One should be able to run the following command:
+```
+docker run -v $(pwd):/mnt/xyz konfigxyz/rust-reason-parser /mnt/xyz/config.yaml /mnt/xyz/app/src/schema.rs
+```
+It works by mounting the entire project into the container, and subsequently
+running the parser on with the provided input.
+
+### Building from scratch
+
 Pre-requisites: 
 - [Haskell Stack](https://docs.haskellstack.org/en/stable/README/)
 
-## Usage
 Pass in a filename and config file to the `stack run` command and get Reason 
 parsed output. See `example-config.yaml` for an example config file.
 
