@@ -209,52 +209,69 @@ module Test = {
 
 ## Configuration Keys (-vv)
 
-#### Types.Aliases To keep the output self-contained, we allow for the
-specification of alias types, that get printed at the top of the output.
+#### Types.Aliases 
 
-#### Types.Containerized We found quite often we would need array types next to
-the regular ones, and those would need to be annotated with our PPX's. This is
-messy and clutters this approach where this file is / stays auto-generated.
+To keep the output self-contained, we allow for the specification of alias
+types, that get printed at the top of the output.
 
-#### Types.Base These are the base mappings. Based on the `value` of the type in
-the `schema.rs`, we map the `value` of the type over. The name of the type get's
+#### Types.Containerized 
+
+We found quite often we would need array types next to the regular ones, and
+those would need to be annotated with our PPX's. This is messy and clutters
+this approach where this file is / stays auto-generated.
+
+#### Types.Base 
+
+These are the base mappings. Based on the `value` of the type in the
+`schema.rs`, we map the `value` of the type over. The name of the type get's
 passed as-is, only converted to camel-case.
 
-#### Types.Nested Whenever we encounter something like `Nullable<foo>` we need
-to know what to map it too. These mappings can be specified here. Note that
-**they recurse**. So given the configuration above, and the input type
+#### Types.Nested 
+
+Whenever we encounter something like `Nullable<foo>` we need to know what to
+map it too. These mappings can be specified here. Note that **they recurse**.
+So given the configuration above, and the input type
 `Nullable<Array<Nullable<Int4>>`, we would generate
 `option(array(option(int)))`. 
 
-#### Types.Nested There may be cases where you don't want to switch based on the
-type's `value`, but rather on its `name`. For instance, when you want to save an
-convert a `string` to a `variant` type only relevant to the FE. This is where
-you would do that.
+#### Types.Nested 
 
-#### Annotations.(Alias-PPX | Type-PPX | Containerized-PPX) PPX annotations can be used to annotate
-types so that they automatically get some extra nice-ties. Such as using
+There may be cases where you don't want to switch based on the type's `value`,
+but rather on its `name`. For instance, when you want to save an convert a
+`string` to a `variant` type only relevant to the FE. This is where you would
+do that.
+
+#### Annotations.(Alias-PPX | Type-PPX | Containerized-PPX) 
+
+PPX annotations can be used to annotate types so that they automatically get
+some extra nice-ties. Such as using
 [decco](https://github.com/reasonml-labs/decco) for automatic JSON conversion,
 or [bs-pancake](https://github.com/rolandpeelen/bs-pancake) to automatically
 generate lenses for each record entry. There are respectively intended for
-either aliases (which are printed at the top), or for the types themselves. Some
-PPX's, like [decco](https://github.com/reasonml-labs/decco) require a sort of
-bottom-up approach, where every type in a record is also annotated itself. Hence
-the `alias-ppx` field. The `containerized-ppx` is the latest addition for more
-flexibility.
+either aliases (which are printed at the top), or for the types themselves.
+Some PPX's, like [decco](https://github.com/reasonml-labs/decco) require a sort
+of bottom-up approach, where every type in a record is also annotated itself.
+Hence the `alias-ppx` field. The `containerized-ppx` is the latest addition for
+more flexibility.
 
-#### Hiding.Tables If the API you're building has some tables that are not to be
-exposed to the FE, here's where you would specify them. They'll be commented out
-in the output. Given that Reason will try to convert as-little as possible, the
+#### Hiding.Tables 
+
+If the API you're building has some tables that are not to be exposed to the
+FE, here's where you would specify them. They'll be commented out in the
+output. Given that Reason will try to convert as-little as possible, the
 comments will automatically dissapear. However, for the more full-stack
 oriented, it might be nice to keep it in there, hence commented as opposed to
 deleted.
 
-#### Hiding.Keys Sometimes one doesn't want to hide a full `table`, but instead
-a `key` that occurs on a bunch of tables. For instance a `userId` or
-`companyId`.
+#### Hiding.Keys 
 
-#### Hiding.Qualified This is the more specific variant to `tables` / `keys`. It
-allows for the full specification of hiding (`user.password`) for instance.
+Sometimes one doesn't want to hide a full `table`, but instead a `key` that
+occurs on a bunch of tables. For instance a `userId` or `companyId`.
+
+#### Hiding.Qualified 
+
+This is the more specific variant to `tables` / `keys`. It allows for the full
+specification of hiding (`user.password`) for instance.
 
 **NOTE** - There is a difference in qualified notation between `types` and
 `hiding`. Reasoning here is that hiding multiple elements from a type is more
