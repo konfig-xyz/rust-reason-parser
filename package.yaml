@@ -27,6 +27,7 @@ dependencies:
 - containers
 - split
 - yaml-config
+- QuickCheck
 
 library:
   source-dirs: src
