@@ -2,12 +2,12 @@
 
 module Main where
 
-import ConfigurationParser
-import qualified Data.Text as T
-import SchemaParser
-import SchemaPrinter
-import System.Environment (getArgs)
-import Types
+import           ConfigurationParser
+import qualified Data.Text           as T
+import           SchemaParser
+import           SchemaPrinter
+import           System.Environment  (getArgs)
+import           Types
 
 main :: IO ()
 main = do

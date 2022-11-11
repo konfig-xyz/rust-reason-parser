@@ -2,11 +2,11 @@
 
 module SchemaParser (parseTypeContainer, parseSchema) where
 
-import Data.Set (member)
-import qualified Data.Text as T
-import Text.Parsec
-import Type.Reflection.Unsafe
-import Types
+import           Data.Set               (member)
+import qualified Data.Text              as T
+import           Text.Parsec
+import           Type.Reflection.Unsafe
+import           Types
 
 data TypeName = Simple T.Text | Qualified (T.Text, T.Text)
   deriving (Eq, Ord)
@@ -47,6 +47,6 @@ parseTable = do
 parseSchema :: T.Text -> [(T.Text, [(T.Text, T.Text)])]
 parseSchema xs = case runParser schemaParser () "Error Parsing" xs of
   Right x -> x
-  Left y -> []
+  Left y  -> []
   where
     schemaParser = manyTill (try parseTable <* spaces) $ try (string "joinable" <|> (eof >> pure ""))

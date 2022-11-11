@@ -1,7 +1,7 @@
 module Types where
 
-import qualified Data.Map as M
-import qualified Data.Set as S
+import qualified Data.Map  as M
+import qualified Data.Set  as S
 import qualified Data.Text as T
 
 ------------------
@@ -26,16 +26,16 @@ type Hidden = S.Set T.Text
 type HiddenQualified = M.Map T.Text (S.Set T.Text)
 
 data Configuration = Configuration
-  { aliasPPX :: [T.Text],
-    typePPX :: [T.Text],
+  { aliasPPX         :: [T.Text],
+    typePPX          :: [T.Text],
     containerizedPPX :: [T.Text],
-    aliases :: Mapping,
-    containerized :: Mapping,
-    base :: Mapping,
-    nested :: Mapping,
-    qualifiedTypes :: Mapping,
-    tables :: Hidden,
-    keys :: Hidden,
-    qualified :: HiddenQualified
+    aliases          :: Mapping,
+    containerized    :: Mapping,
+    base             :: Mapping,
+    nested           :: Mapping,
+    qualifiedTypes   :: Mapping,
+    tables           :: Hidden,
+    keys             :: Hidden,
+    qualified        :: HiddenQualified
   }
   deriving (Show)

@@ -2,15 +2,15 @@
 
 module SchemaPrinter (printTypeAliases, printSchema) where
 
-import qualified Data.List as L
-import qualified Data.Map as M
-import Data.Maybe (fromJust, isJust)
-import qualified Data.Set as S
-import qualified Data.Text as T
-import Helpers
-import SchemaParser
-import Text.Parsec
-import Types
+import qualified Data.List    as L
+import qualified Data.Map     as M
+import           Data.Maybe   (fromJust, isJust)
+import qualified Data.Set     as S
+import qualified Data.Text    as T
+import           Helpers
+import           SchemaParser
+import           Text.Parsec
+import           Types
 
 printTypeAlias :: Configuration -> (T.Text, T.Text) -> T.Text
 printTypeAlias configuration (x, y) =

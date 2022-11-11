@@ -1,10 +1,10 @@
 module Helpers where
 
-import qualified Data.Map as M
-import qualified Data.Set as S
-import qualified Data.Text as T
+import qualified Data.Map    as M
+import qualified Data.Set    as S
+import qualified Data.Text   as T
 import qualified Text.Casing as C
-import Types
+import           Types
 
 mergeQualified :: Configuration -> T.Text -> Hidden
 mergeQualified configuration typeName = case M.lookup typeName (qualified configuration) of
@@ -21,4 +21,4 @@ snakeToPascal = T.pack . C.toPascal . C.fromSnake . T.unpack
 parseTypeSplitBy :: T.Text -> T.Text -> Maybe (T.Text, T.Text)
 parseTypeSplitBy c xs = case T.splitOn c xs of
   [x, y] -> Just (x, y) --TODO - trim whitespace
-  _ -> Nothing
+  _      -> Nothing

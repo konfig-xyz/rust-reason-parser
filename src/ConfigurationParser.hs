@@ -1,16 +1,17 @@
-{-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE OverloadedStrings   #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 
 module ConfigurationParser (makeConfig) where
 
-import Data.Bifunctor (first)
-import qualified Data.Map as M
-import Helpers (parseTypeSplitBy)
-import Data.Maybe (mapMaybe)
-import qualified Data.Set as S
-import qualified Data.Text as T
-import Data.Yaml.Config (Config, keys, load, lookup, lookupDefault, subconfig)
-import qualified Types as T
+import           Data.Bifunctor   (first)
+import qualified Data.Map         as M
+import           Data.Maybe       (mapMaybe)
+import qualified Data.Set         as S
+import qualified Data.Text        as T
+import           Data.Yaml.Config (Config, keys, load, lookup, lookupDefault,
+                                   subconfig)
+import           Helpers          (parseTypeSplitBy)
+import qualified Types            as T
 
 parseTypeMapConfiguration :: T.Text -> Maybe (T.Text, T.Text)
 parseTypeMapConfiguration = parseTypeSplitBy "->"
