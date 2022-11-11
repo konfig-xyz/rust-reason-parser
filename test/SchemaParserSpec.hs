@@ -4,7 +4,7 @@
 module SchemaParserSpec (run) where
 
 import Data.Text
-import Helpers (SafeString, checkN, toText)
+import Helpers
 import qualified SchemaParser
 import Test.QuickCheck
 import Text.Parsec
