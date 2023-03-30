@@ -34,6 +34,7 @@ parseType = do
 
 parseTable :: Parsec T.Text () (T.Text, [(T.Text, T.Text)])
 parseTable = do
+  optional $ string "diesel::" -- Diesel v2
   string "table! {" <* try spaces
   string "use diesel::sql_types::*;" <* try spaces
   typeName <- manyTill anyChar $ try space
@@ -47,6 +48,9 @@ parseTable = do
 parseSchema :: T.Text -> [(T.Text, [(T.Text, T.Text)])]
 parseSchema xs = case runParser schemaParser () "Error Parsing" xs of
   Right x -> x
-  Left y  -> []
+  Left y -> []
   where
-    schemaParser = manyTill (try parseTable <* spaces) $ try (string "joinable" <|> (eof >> pure ""))
+    schemaParser = do
+      optional $ string "// @generated automatically by Diesel CLI." 
+      optional spaces
+      manyTill (try parseTable <* spaces) $ try (string "joinable" <|> (eof >> pure ""))
