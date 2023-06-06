@@ -2,11 +2,11 @@
 
 module SchemaParser (parseTypeContainer, parseSchema) where
 
-import           Data.Set               (member)
-import qualified Data.Text              as T
-import           Text.Parsec
-import           Type.Reflection.Unsafe
-import           Types
+import Data.Set (member)
+import qualified Data.Text as T
+import Text.Parsec
+import Type.Reflection.Unsafe
+import Types
 
 data TypeName = Simple T.Text | Qualified (T.Text, T.Text)
   deriving (Eq, Ord)
@@ -51,6 +51,6 @@ parseSchema xs = case runParser schemaParser () "Error Parsing" xs of
   Left y -> []
   where
     schemaParser = do
-      optional $ string "// @generated automatically by Diesel CLI." 
+      optional $ string "// @generated automatically by Diesel CLI."
       optional spaces
-      manyTill (try parseTable <* spaces) $ try (string "joinable" <|> (eof >> pure ""))
+      manyTill (try parseTable <* spaces) $ try (optional $ string "diesel::" <* string "joinable" <|> (eof >> pure ""))
