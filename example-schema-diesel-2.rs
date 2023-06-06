@@ -39,3 +39,9 @@ diesel::table! {
         some_option -> Nullable<Text>,
     }
 }
+
+diesel::joinable!(foo -> bar (bar_id));
+
+diesel::allow_tables_to_appear_in_same_query!(
+    bar,
+);
