@@ -8,7 +8,7 @@ import qualified Data.Map         as M
 import           Data.Maybe       (mapMaybe)
 import qualified Data.Set         as S
 import qualified Data.Text        as T
-import           Data.Yaml.Config (Config, keys, load, lookup, lookupDefault,
+import           Yaml (Config, keys, load, lookup, lookupDefault,
                                    subconfig)
 import           Helpers          (parseTypeSplitBy)
 import qualified Types            as T
