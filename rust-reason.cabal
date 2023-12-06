@@ -32,6 +32,7 @@ library
       SchemaParser
       SchemaPrinter
       Types
+      Yaml
   other-modules:
       Paths_rust_reason
   hs-source-dirs:
@@ -43,7 +44,10 @@ library
     , parsec
     , split
     , text
-    , yaml-config
+    , yaml
+    , unordered-containers
+    , deepseq
+    , aeson
   default-language: Haskell2010
 
 executable rust-reason-exe
@@ -61,7 +65,10 @@ executable rust-reason-exe
     , rust-reason
     , split
     , text
-    , yaml-config
+    , yaml
+    , unordered-containers
+    , deepseq
+    , aeson
   default-language: Haskell2010
 
 test-suite rust-reason-test
@@ -80,5 +87,8 @@ test-suite rust-reason-test
     , rust-reason
     , split
     , text
-    , yaml-config
+    , yaml
+    , unordered-containers
+    , deepseq
+    , aeson
   default-language: Haskell2010
