@@ -12,11 +12,12 @@ types:
     - Bool->bool
     - Int4->int
     - Float4->float
+    - Timestamp->Js.Date.t
   nested:
     - Array->array
     - Nullable->option
   qualified:
-    - test.some_string->someRandomTypeName
+    - members.role->Api.Types.Role.t
 annotations:
   alias-ppx:
     - decco
