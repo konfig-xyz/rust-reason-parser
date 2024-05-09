@@ -152,6 +152,7 @@ subconfig ::
   m Config
 subconfig path c@(Config parents o) = case KeyMap.lookup path o of
   Just (Yaml.Object so) -> return $ Config (path : parents) so
+  Just Yaml.Null -> return $ Config (path : parents) KeyMap.empty
   Nothing -> err
   where
     err = ke $ "Subconfig " <> fullpath c path <> " not found."
