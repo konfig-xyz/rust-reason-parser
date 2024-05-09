@@ -1,4 +1,71 @@
 [@decco]
 type uuid = string;
 
+module Companies = {
+  [@decco]
+  [@bs.deriving jsConverter]
+  type t = {
+    id: uuid,
+    companyName: string,
+    createdAt: Js.Date.t,
+    updatedAt: Js.Date.t,
+    archivedAt: option(Js.Date.t),
+  };
 
+  [@decco]
+  type arrayT = array(t);
+
+  [@decco]
+  type listT = list(t);
+
+  [@decco]
+  type optionT = option(t);
+};
+
+module Members = {
+  [@decco]
+  [@bs.deriving jsConverter]
+  type t = {
+    id: uuid,
+    userId: uuid,
+    companyId: uuid,
+    role: Api.Types.Role.t,
+    createdAt: Js.Date.t,
+    updatedAt: Js.Date.t,
+    archivedAt: option(Js.Date.t),
+  };
+
+  [@decco]
+  type arrayT = array(t);
+
+  [@decco]
+  type listT = list(t);
+
+  [@decco]
+  type optionT = option(t);
+};
+
+module Users = {
+  [@decco]
+  [@bs.deriving jsConverter]
+  type t = {
+    id: uuid,
+    email: string,
+    password: string,
+    blocked: bool,
+    isSuperUser: bool,
+    verified: bool,
+    createdAt: Js.Date.t,
+    updatedAt: Js.Date.t,
+    archivedAt: option(Js.Date.t),
+  };
+
+  [@decco]
+  type arrayT = array(t);
+
+  [@decco]
+  type listT = list(t);
+
+  [@decco]
+  type optionT = option(t);
+};

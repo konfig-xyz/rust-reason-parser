@@ -1,63 +1,50 @@
-@decco
+@spice
 type uuid = string
 
-// module HideMe = { }
-
-module QualifiedShown = {
-  @decco
-  @bs.deriving jsConverter
+module Companies = {
+  @spice
   type t = {
-    qualifiedField: string,
+    id: uuid,
+    companyName: string,
+    createdAt: string,
+    updatedAt: string,
+    archivedAt: option<string>,
   }
 
-  @decco
+  @spice
   type arrayT = array<t>
-
-  @decco
-  type listT = list<t>
-
-  @decco
-  type optionT = option<t>
 };
 
-module QualifiedHide = {
-  @decco
-  @bs.deriving jsConverter
+module Members = {
+  @spice
   type t = {
-    // qualifiedField: string,
-    // anotherQualifiedField: string,
+    id: uuid,
+    userId: uuid,
+    companyId: uuid,
+    role: Api.Types.Role.t,
+    createdAt: string,
+    updatedAt: string,
+    archivedAt: option<string>,
   }
 
-  @decco
+  @spice
   type arrayT = array<t>
-
-  @decco
-  type listT = list<t>
-
-  @decco
-  type optionT = option<t>
 };
 
-module Test = {
-  @decco
-  @bs.deriving jsConverter
+module Users = {
+  @spice
   type t = {
-    testId: uuid,
-    // hiddenId: uuid,
-    someString: someRandomTypeName,
-    someBool: bool,
-    someInt: int,
-    someFloat: float,
-    someArray: array<string>,
-    someOption: option<string>,
+    id: uuid,
+    email: string,
+    password: string,
+    blocked: bool,
+    isSuperUser: bool,
+    verified: bool,
+    createdAt: string,
+    updatedAt: string,
+    archivedAt: option<string>,
   }
 
-  @decco
+  @spice
   type arrayT = array<t>
-
-  @decco
-  type listT = list<t>
-
-  @decco
-  type optionT = option<t>
 };
