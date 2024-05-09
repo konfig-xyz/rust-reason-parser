@@ -2,35 +2,30 @@ language: rescript
 types:
   aliases:
     - uuid->string
-  containerized:
-    - arrayT->array
-    - listT->list
-    - optionT->option
   base:
     - Uuid->uuid
     - Text->string
     - Bool->bool
+    - Int2->int
     - Int4->int
-    - Float4->float
+    - Float8->float
+    - Timestamp->string
+    - Role->Api.Types.Role.t
+  containerized:
+    - arrayT->array
   nested:
     - Array->array
     - Nullable->option
-  qualified:
-    - test.some_string->someRandomTypeName
+  qualified: null
 annotations:
   alias-ppx:
-    - decco
+    - spice
   type-ppx:
-    - decco
-    - bs.deriving jsConverter
+    - spice
   containerized-ppx:
-    - decco
+    - spice
 hiding:
-  tables: 
-    - hide_me 
-  keys: 
-    - hidden_id
-  qualified:
-    qualified_hide:
-    - qualified_field
-    - another_qualified_field
+  tables: null
+  keys: null
+  qualified: null
+

@@ -38,6 +38,7 @@ parseTable = do
   optional $ string "diesel::" -- Diesel v2
   string "table! {" <* try spaces
   string "use diesel::sql_types::*;" <* try spaces
+  optional $ try $ string "use super::sql_types::" <* manyTill anyChar (try (string ";")) <* spaces
   typeName <- manyTill anyChar $ try space
   spaces
   try $ manyTill anyChar $ try $ string "{"
