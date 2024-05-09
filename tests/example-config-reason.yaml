@@ -1,0 +1,36 @@
+language: reason
+types:
+  aliases:
+    - uuid->string
+  containerized:
+    - arrayT->array
+    - listT->list
+    - optionT->option
+  base:
+    - Uuid->uuid
+    - Text->string
+    - Bool->bool
+    - Int4->int
+    - Float4->float
+  nested:
+    - Array->array
+    - Nullable->option
+  qualified:
+    - test.some_string->someRandomTypeName
+annotations:
+  alias-ppx:
+    - decco
+  type-ppx:
+    - decco
+    - bs.deriving jsConverter
+  containerized-ppx:
+    - decco
+hiding:
+  tables: 
+    - hide_me 
+  keys: 
+    - hidden_id
+  qualified:
+    qualified_hide:
+    - qualified_field
+    - another_qualified_field

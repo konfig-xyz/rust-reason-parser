@@ -1,10 +1,11 @@
 module Helpers where
 
-import qualified Data.Map    as M
-import qualified Data.Set    as S
-import qualified Data.Text   as T
+import qualified Data.Map as M
+import qualified Data.Set as S
+import qualified Data.Text as T
 import qualified Text.Casing as C
-import           Types
+import Types
+import Prelude hiding (repeat)
 
 mergeQualified :: Configuration -> T.Text -> Hidden
 mergeQualified configuration typeName = case M.lookup typeName (qualified configuration) of
@@ -17,8 +18,12 @@ snakeToCamel = T.pack . C.toCamel . C.fromSnake . T.unpack
 snakeToPascal :: T.Text -> T.Text
 snakeToPascal = T.pack . C.toPascal . C.fromSnake . T.unpack
 
-
 parseTypeSplitBy :: T.Text -> T.Text -> Maybe (T.Text, T.Text)
 parseTypeSplitBy c xs = case T.splitOn c xs of
-  [x, y] -> Just (x, y) --TODO - trim whitespace
-  _      -> Nothing
+  [x, y] -> Just (x, y) -- TODO - trim whitespace
+  _ -> Nothing
+
+repeat :: Int -> T.Text -> T.Text
+repeat 0 c = T.pack "" 
+repeat 1 c = c
+repeat i c = c <> repeat (i - 1) c

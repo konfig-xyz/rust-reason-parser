@@ -14,7 +14,7 @@ import Types
 
 printTypeAlias :: Configuration -> (T.Text, T.Text) -> T.Text
 printTypeAlias configuration (x, y) =
-  T.concat (aliasPPX configuration) <> "type " <> x <> " = " <> y <> semi
+  printPPXs 0 configuration (aliasPPX configuration) <> "type " <> x <> " = " <> y <> semi
   where
     semi = case language configuration of
       Rescript -> ""
@@ -74,18 +74,18 @@ printTableName configuration tableName Hidden = "// " <> printModuleName tableNa
       Rescript -> ""
       Reason -> ";"
 
-printPPXs :: Configuration -> [T.Text] -> T.Text
-printPPXs configuration = T.concat . map (\x -> "  " <> before <> x <> after <> "\n")
+printPPXs :: Int -> Configuration -> [T.Text] -> T.Text
+printPPXs i configuration = T.concat . map (\x -> Helpers.repeat i " " <> before <> x <> after <> "\n")
   where
     (before, after) = case language configuration of
       Rescript -> ("@", "")
       Reason -> ("[@", "]")
 
 printTypePPXs :: Configuration -> T.Text
-printTypePPXs configuration = printPPXs configuration $ typePPX configuration
+printTypePPXs configuration = printPPXs 2 configuration $ typePPX configuration
 
 printContainerizedPPXs :: Configuration -> T.Text
-printContainerizedPPXs configuration = printPPXs configuration $ containerizedPPX configuration
+printContainerizedPPXs configuration = printPPXs 2 configuration $ containerizedPPX configuration
 
 printContainerTypeAliases :: Configuration -> T.Text
 printContainerTypeAliases configuration =
