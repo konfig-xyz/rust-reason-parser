@@ -52,6 +52,7 @@ stack run {example-config.yaml} {example-schema.rs}
 ### Input
 `example-config.yaml`
 ```yaml
+language: reason
 types:
   aliases:
     - uuid->string
@@ -208,6 +209,9 @@ module Test = {
     ```
 
 ## Configuration Keys (-vv)
+
+#### Language
+Either `reason` or `rescript`.
 
 #### Types.Aliases 
 

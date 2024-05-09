@@ -2,19 +2,23 @@
 
 module SchemaPrinter (printTypeAliases, printSchema) where
 
-import qualified Data.List    as L
-import qualified Data.Map     as M
-import           Data.Maybe   (fromJust, isJust)
-import qualified Data.Set     as S
-import qualified Data.Text    as T
-import           Helpers
-import           SchemaParser
-import           Text.Parsec
-import           Types
+import qualified Data.List as L
+import qualified Data.Map as M
+import Data.Maybe (fromJust, isJust)
+import qualified Data.Set as S
+import qualified Data.Text as T
+import Helpers
+import SchemaParser
+import Text.Parsec
+import Types
 
 printTypeAlias :: Configuration -> (T.Text, T.Text) -> T.Text
 printTypeAlias configuration (x, y) =
-  T.concat (aliasPPX configuration) <> "type " <> x <> " = " <> y <> ";"
+  T.concat (aliasPPX configuration) <> "type " <> x <> " = " <> y <> semi
+  where
+    semi = case language configuration of
+      Rescript -> ""
+      Reason -> ";"
 
 printTypeAliases :: Configuration -> T.Text
 printTypeAliases configuration =
@@ -33,7 +37,10 @@ printTypeContainer configuration (Right (x, value))
   | otherwise = x <> nesting
   where
     key = M.lookup x $ nested configuration
-    nesting = "(" <> printTypeValue configuration value <> ")"
+    nesting = lBrack <> printTypeValue configuration value <> rBrack
+    (lBrack, rBrack) = case language configuration of
+      Rescript -> ("<", ">")
+      Reason -> ("(", ")")
 
 printTypeValue :: Configuration -> T.Text -> T.Text
 printTypeValue configuration typeName
@@ -59,18 +66,26 @@ printType configuration tableName (typeName, typeValue)
 printModuleName :: T.Text -> T.Text
 printModuleName xs = "module " <> snakeToPascal xs <> " = "
 
-printTableName :: T.Text -> Visibility T.Text -> T.Text
-printTableName tableName (Visible types) = printModuleName tableName <> "{\n" <> types <> "\n};"
-printTableName tableName Hidden = "// " <> printModuleName tableName <> "{ };"
+printTableName :: Configuration -> T.Text -> Visibility T.Text -> T.Text
+printTableName configuration tableName (Visible types) = printModuleName tableName <> "{\n" <> types <> "\n};"
+printTableName configuration tableName Hidden = "// " <> printModuleName tableName <> "{ }" <> semi
+  where
+    semi = case language configuration of
+      Rescript -> ""
+      Reason -> ";"
 
-printPPXs :: [T.Text] -> T.Text
-printPPXs = T.concat . map ("  " <>)
+printPPXs :: Configuration -> [T.Text] -> T.Text
+printPPXs configuration = T.concat . map (\x -> "  " <> before <> x <> after <> "\n")
+  where
+    (before, after) = case language configuration of
+      Rescript -> ("@", "")
+      Reason -> ("[@", "]")
 
 printTypePPXs :: Configuration -> T.Text
-printTypePPXs configuration = printPPXs $ typePPX configuration
+printTypePPXs configuration = printPPXs configuration $ typePPX configuration
 
 printContainerizedPPXs :: Configuration -> T.Text
-printContainerizedPPXs configuration = printPPXs $ containerizedPPX configuration
+printContainerizedPPXs configuration = printPPXs configuration $ containerizedPPX configuration
 
 printContainerTypeAliases :: Configuration -> T.Text
 printContainerTypeAliases configuration =
@@ -81,22 +96,35 @@ printContainerTypeAliases configuration =
           <> x
           <> " = "
           <> y
-          <> "(t);"
+          <> lBrack
+          <> "t"
+          <> rBrack
+          <> semi
     )
       <$> M.toList (containerized configuration)
+  where
+    (lBrack, rBrack, semi) = case language configuration of
+      Rescript -> ("<", ">", "")
+      Reason -> ("(", ")", ";")
 
 printTableTypes :: Configuration -> T.Text -> [TypePair] -> T.Text
 printTableTypes configuration tableName xs =
   printTypePPXs configuration
     <> "  type t = {\n    "
     <> T.intercalate ",\n    " (fmap (printType configuration tableName) xs)
-    <> ",\n  };\n\n"
+    <> ",\n  }"
+    <> semi
+    <> "\n\n"
     <> printContainerTypeAliases configuration
+  where
+    semi = case language configuration of
+      Rescript -> ""
+      Reason -> ";"
 
 printTable :: Configuration -> Table -> T.Text
 printTable configuration (tableName, types)
-  | S.member tableName (tables configuration) = printTableName tableName Hidden
-  | otherwise = printTableName tableName (Visible $ printTableTypes configuration tableName types)
+  | S.member tableName (tables configuration) = printTableName configuration tableName Hidden
+  | otherwise = printTableName configuration tableName (Visible $ printTableTypes configuration tableName types)
 
 printSchema :: Configuration -> Schema -> T.Text
 printSchema configuration = T.intercalate "\n\n" . map (printTable configuration)
