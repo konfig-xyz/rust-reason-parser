@@ -67,7 +67,11 @@ printModuleName :: T.Text -> T.Text
 printModuleName xs = "module " <> snakeToPascal xs <> " = "
 
 printTableName :: Configuration -> T.Text -> Visibility T.Text -> T.Text
-printTableName configuration tableName (Visible types) = printModuleName tableName <> "{\n" <> types <> "\n};"
+printTableName configuration tableName (Visible types) = printModuleName tableName <> "{\n" <> types <> "\n}" <> semi
+  where
+    semi = case language configuration of
+      Rescript -> ""
+      Reason -> ";"
 printTableName configuration tableName Hidden = "// " <> printModuleName tableName <> "{ }" <> semi
   where
     semi = case language configuration of
@@ -88,21 +92,23 @@ printContainerizedPPXs :: Configuration -> T.Text
 printContainerizedPPXs configuration = printPPXs 2 configuration $ containerizedPPX configuration
 
 printContainerTypeAliases :: Configuration -> T.Text
-printContainerTypeAliases configuration =
-  T.intercalate "\n\n" $
-    ( \(x, y) ->
-        printContainerizedPPXs configuration
-          <> "  type "
-          <> x
-          <> " = "
-          <> y
-          <> lBrack
-          <> "t"
-          <> rBrack
-          <> semi
-    )
-      <$> M.toList (containerized configuration)
+printContainerTypeAliases configuration = case p of
+  [] -> T.pack ""
+  xs -> "\n\n" <> T.intercalate "\n\n" p
   where
+    p =
+      ( \(x, y) ->
+          printContainerizedPPXs configuration
+            <> "  type "
+            <> x
+            <> " = "
+            <> y
+            <> lBrack
+            <> "t"
+            <> rBrack
+            <> semi
+      )
+        <$> M.toList (containerized configuration)
     (lBrack, rBrack, semi) = case language configuration of
       Rescript -> ("<", ">", "")
       Reason -> ("(", ")", ";")
@@ -114,7 +120,6 @@ printTableTypes configuration tableName xs =
     <> T.intercalate ",\n    " (fmap (printType configuration tableName) xs)
     <> ",\n  }"
     <> semi
-    <> "\n\n"
     <> printContainerTypeAliases configuration
   where
     semi = case language configuration of
