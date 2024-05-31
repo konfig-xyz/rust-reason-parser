@@ -5,6 +5,7 @@ module SchemaParser (parseTypeContainer, parseSchema) where
 import Control.Monad
 import Data.Set (member)
 import qualified Data.Text as T
+import Debug.Trace
 import Text.Parsec
 import Type.Reflection.Unsafe
 import Types
@@ -36,21 +37,23 @@ parseType = do
 parseTable :: Parsec T.Text () (T.Text, [(T.Text, T.Text)])
 parseTable = do
   optional $ string "diesel::" -- Diesel v2
-  string "table! {" <* try spaces
-  string "use diesel::sql_types::*;" <* try spaces
-  optional $ try $ string "use super::sql_types::" <* manyTill anyChar (try (string ";")) <* spaces
+  string "table! {"
+  optional (spaces *> string "use" <* manyTill anyChar (try $ newline <* newline))
+
+  spaces
   typeName <- manyTill anyChar $ try space
   spaces
-  try $ manyTill anyChar $ try $ string "{"
-  contents <- manyTill (try parseType) $ try $ spaces *> string "}"
+
+  try $ manyTill anyChar (try $ string "{")
+  contents <- manyTill (try parseType) (try $ spaces *> string "}")
   spaces
-  try $ string "}"
+
+  string "}"
   pure (T.pack typeName, contents)
 
 sqlTypes = do
-  optional $ string "pub mod sql_types {" <* try spaces
+  string "pub mod sql_types {" <* try spaces
   manyTill anyChar (try (string "}"))
-  pure ()
 
 parseSchema :: T.Text -> [(T.Text, [(T.Text, T.Text)])]
 parseSchema xs = case runParser schemaParser () "Error Parsing" xs of
@@ -58,6 +61,6 @@ parseSchema xs = case runParser schemaParser () "Error Parsing" xs of
   Left y -> []
   where
     schemaParser = do
-      optional $ string "// @generated automatically by Diesel CLI."
-      optional spaces <* sqlTypes <* spaces
+      optional $ string "// @generated automatically by Diesel CLI." <* spaces
+      optional sqlTypes <* spaces
       manyTill (try parseTable <* spaces) $ try (optional $ string "diesel::" <* string "joinable" <|> (eof >> pure ""))
