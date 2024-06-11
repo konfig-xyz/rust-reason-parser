@@ -1,6 +1,12 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module SchemaParser (parseTypeContainer, parseSchema) where
+module SchemaParser
+  ( parseQualifiedType,
+    parseTypeContainer,
+    parseType,
+    parseSchema,
+  )
+where
 
 import           Data.Set               (member)
 import qualified Data.Text              as T

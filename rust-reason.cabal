@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: d638651666de833bab61ad9a173ef67bf5aabd3290dd88338fa71adc5cd880b5
+-- hash: 3eb8f8d21cdd6cc07bf7067e8b9eaebc24c7b9c726abf24c4de7ca8584a419f4
 
 name:           rust-reason
 version:        0.1.0.0
@@ -37,7 +37,8 @@ library
   hs-source-dirs:
       src
   build-depends:
-      base >=4.7 && <5
+      QuickCheck
+    , base >=4.7 && <5
     , casing
     , containers
     , parsec
@@ -54,7 +55,8 @@ executable rust-reason-exe
       app
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
-      base >=4.7 && <5
+      QuickCheck
+    , base >=4.7 && <5
     , casing
     , containers
     , parsec
@@ -68,12 +70,15 @@ test-suite rust-reason-test
   type: exitcode-stdio-1.0
   main-is: Spec.hs
   other-modules:
+      Helpers
+      SchemaParserSpec
       Paths_rust_reason
   hs-source-dirs:
       test
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
-      base >=4.7 && <5
+      QuickCheck
+    , base >=4.7 && <5
     , casing
     , containers
     , parsec
