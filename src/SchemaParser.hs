@@ -29,6 +29,7 @@ parseTypeContainer = do
 parseType :: Parsec T.Text () (T.Text, T.Text)
 parseType = do
   spaces
+  try $ optional (string "#[" <* manyTill anyChar (try $ string "]" <* spaces))
   typeName <- manyTill anyChar $ spaces *> string "->" <* spaces
   typeVar <- manyTill anyChar $ string ","
   optional eof
@@ -55,10 +56,8 @@ sqlTypes = do
   string "pub mod sql_types {" <* try spaces
   manyTill anyChar (try (string "}"))
 
-parseSchema :: T.Text -> [(T.Text, [(T.Text, T.Text)])]
-parseSchema xs = case runParser schemaParser () "Error Parsing" xs of
-  Right x -> x
-  Left y -> []
+parseSchema :: T.Text -> Either ParseError [(T.Text, [(T.Text, T.Text)])]
+parseSchema = runParser schemaParser () "Error Parsing"
   where
     schemaParser = do
       optional $ string "// @generated automatically by Diesel CLI." <* spaces

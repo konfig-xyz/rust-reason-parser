@@ -2,12 +2,12 @@
 
 module Main where
 
-import           ConfigurationParser
-import qualified Data.Text           as T
-import           SchemaParser
-import           SchemaPrinter
-import           System.Environment  (getArgs)
-import           Types
+import ConfigurationParser
+import qualified Data.Text as T
+import SchemaParser
+import SchemaPrinter
+import System.Environment (getArgs)
+import Types
 
 main :: IO ()
 main = do
@@ -16,4 +16,8 @@ main = do
   configuration <- makeConfig configFile
   contents <- readFile schemaFile
 
-  putStrLn $ T.unpack $ printTypeAliases configuration <> printSchema configuration (parseSchema $ T.pack contents)
+  putStrLn $
+    T.unpack $
+      case parseSchema (T.pack contents) of
+        Left err -> T.pack $ show err
+        Right schema -> printTypeAliases configuration <> printSchema configuration schema
