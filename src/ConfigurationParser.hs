@@ -3,7 +3,6 @@
 
 module ConfigurationParser (makeConfig) where
 
-import Prelude hiding (lookup)
 import Data.Bifunctor (first)
 import qualified Data.Map as M
 import Data.Maybe (mapMaybe)
@@ -15,7 +14,6 @@ import Yaml
   ( Config,
     keys,
     load,
-    lookup,
     lookupDefault,
     subconfig,
   )
@@ -45,7 +43,7 @@ makeConfig path = do
   pure $
     T.Configuration
       (toLanguage $ lookupDefault "language" "reason" config)
-      (lookup "key-ppx" annotations)
+      (lookupDefault "key-ppx" Nothing annotations)
       (lookupDefault "alias-ppx" [] annotations)
       (lookupDefault "type-ppx" [] annotations)
       (lookupDefault "containerized-ppx" [] annotations)
