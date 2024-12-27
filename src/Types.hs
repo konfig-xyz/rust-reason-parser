@@ -29,6 +29,7 @@ data Language = Reason | Rescript deriving (Show)
 
 data Configuration = Configuration
   { language :: Language,
+    keyPPX :: Maybe T.Text,
     aliasPPX :: [T.Text],
     typePPX :: [T.Text],
     containerizedPPX :: [T.Text],

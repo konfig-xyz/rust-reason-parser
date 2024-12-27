@@ -18,6 +18,7 @@ types:
   qualified:
     - test.some_string->someRandomTypeName
 annotations:
+  key-ppx: "@decco.key(\"{}\")"
   alias-ppx:
     - decco
   type-ppx:

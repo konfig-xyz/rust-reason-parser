@@ -49,6 +49,13 @@ printTypeValue configuration typeName
   where
     key = M.lookup typeName $ base configuration
 
+adaptKeyPPX :: Configuration -> T.Text -> T.Text
+adaptKeyPPX configuration typeName = case keyPPX configuration of
+  Just keyPPX -> T.replace (T.pack "{}") typeName keyPPX <> " " <> snakeCaseTypename
+  Nothing -> snakeCaseTypename
+  where
+    snakeCaseTypename = snakeToCamel typeName
+
 printType :: Configuration -> T.Text -> TypePair -> T.Text
 printType configuration tableName (typeName, typeValue)
   | S.member typeName mergedQualifiedKeys = "// " <> typeString
@@ -56,7 +63,8 @@ printType configuration tableName (typeName, typeValue)
   | otherwise = typeString
   where
     mergedQualifiedKeys = mergeQualified configuration tableName
-    typeStringLHS = snakeToCamel typeName <> ": "
+    typeStringLHS = typeNameWithKeyPPX <> ": "
+    typeNameWithKeyPPX = adaptKeyPPX configuration typeName
     qualifiedTypeString =
       fmap (typeStringLHS <>) $
         M.lookup (tableName <> "." <> typeName) $
