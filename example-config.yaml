@@ -1,4 +1,4 @@
-language: rescript
+language: reason
 types:
   aliases:
     - uuid->string

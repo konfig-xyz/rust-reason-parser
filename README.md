@@ -72,6 +72,7 @@ types:
   qualified:
     - test.some_string->someRandomTypeName
 annotations:
+  key-ppx: "@decco.key(\"{}\")"
   alias-ppx:
     - decco
   type-ppx:
@@ -141,7 +142,7 @@ module QualifiedShown = {
   [@decco]
   [@bs.deriving jsConverter]
   type t = {
-    qualifiedField: string,
+    @decco.key("qualified_field") qualifiedField: string,
   };
 
   [@decco]
@@ -158,8 +159,8 @@ module QualifiedHide = {
   [@decco]
   [@bs.deriving jsConverter]
   type t = {
-    // qualifiedField: string,
-    // anotherQualifiedField: string,
+    // @decco.key("qualified_field") qualifiedField: string,
+    // @decco.key("another_qualified_field") anotherQualifiedField: string,
   };
 
   [@decco]
@@ -176,14 +177,14 @@ module Test = {
   [@decco]
   [@bs.deriving jsConverter]
   type t = {
-    testId: uuid,
-    // hiddenId: uuid,
-    someString: someRandomTypeName,
-    someBool: bool,
-    someInt: int,
-    someFloat: float,
-    someArray: array(string),
-    someOption: option(string),
+    @decco.key("test_id") testId: uuid,
+    // @decco.key("hidden_id") hiddenId: uuid,
+    @decco.key("some_string") someString: someRandomTypeName,
+    @decco.key("some_bool") someBool: bool,
+    @decco.key("some_int") someInt: int,
+    @decco.key("some_float") someFloat: float,
+    @decco.key("some_array") someArray: array(string),
+    @decco.key("some_option") someOption: option(string),
   };
 
   [@decco]
@@ -195,6 +196,7 @@ module Test = {
   [@decco]
   type optionT = option(t);
 };
+
 ```
 
 ## Development
@@ -257,6 +259,12 @@ Some PPX's, like [decco](https://github.com/reasonml-labs/decco) require a sort
 of bottom-up approach, where every type in a record is also annotated itself.
 Hence the `alias-ppx` field. The `containerized-ppx` is the latest addition for
 more flexibility.
+
+There is one additional annotation that has some special syntax. I've found that when using things like Decco, or Spice, while we want to use camelCased things locally, it could be that the database tables are named with something that is more used in your backend language (snake_case, PascalCase, whichever - I think the PG default is snake_case). You can use this key to still parse into camelCase, by annotating the original key with: `"@decco.key(\"{}\")"`. Note a few things:
+- The entire string is escaped, because yaml doesn't allow `@`.
+- The content within `{}` will be replaced with the original type-name.
+- You can enter anything there - so `"@spice.key(\"{}\")"` will also work.
+- Default Yaml escaping will apply
 
 #### Hiding.Tables 
 
